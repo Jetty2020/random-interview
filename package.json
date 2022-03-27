@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "port": "lsof -P -i :3000 |grep LISTEN |awk '{print $2}' |xargs kill -9"
   },
   "dependencies": {
     "next": "12.1.1",

@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
-import PageTitle from '../components/common/PageTitle';
-import Example from '../components/landing/Example';
+import Example from '@components/landing/Example';
+import PageTitle from '@components/common/PageTitle';
 
 const Home: NextPage = () => {
   return (

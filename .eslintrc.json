@@ -91,6 +91,7 @@
         "allowForLoopAfterthoughts": true
       }
     ],
+    "jsx-a11y/label-has-associated-control": "off",
     "react/jsx-key": "error",
     "import/prefer-default-export": "off",
     "react/jsx-boolean-value": "off",

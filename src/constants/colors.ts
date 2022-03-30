@@ -45,3 +45,5 @@ export const GREEN_100 = '#EBF8ED';
 export const RED_300 = '#E55959';
 export const RED_200 = '#F3B2B2';
 export const RED_100 = '#FCEEEE';
+
+export const BLACK = '#000000';

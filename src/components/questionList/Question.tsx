@@ -20,16 +20,16 @@ const Question = ({ question, answer }: QuestionProps) => {
     setIsOpened((state) => !state);
   }, []);
   return (
-    <QuestionItem>
-      <QuestionButton onClick={handleClick} isOpened={isOpened}>
+    <ItemQuestion>
+      <ButtonQuestion onClick={handleClick} isOpened={isOpened}>
         <QuestionMark>Q.</QuestionMark>
         <Text>{question}</Text>
-      </QuestionButton>
-      <AnswerButton onClick={handleClick} isOpened={isOpened}>
+      </ButtonQuestion>
+      <ButtonAnswer onClick={handleClick} isOpened={isOpened}>
         <AnswerMark>A.</AnswerMark>
         <Text>{answer}</Text>
-      </AnswerButton>
-    </QuestionItem>
+      </ButtonAnswer>
+    </ItemQuestion>
   );
 };
 
@@ -37,11 +37,11 @@ interface ButtonProps {
   isOpened: boolean;
 }
 
-const QuestionItem = styled.li`
+const ItemQuestion = styled.li`
   margin: 0 auto;
 `;
 
-const QuestionButton = styled.button<ButtonProps>`
+const ButtonQuestion = styled.button<ButtonProps>`
   display: inline-flex;
   align-items: center;
   width: 100%;
@@ -72,7 +72,7 @@ const Text = styled.span`
   font-size: ${pxToRem(20)};
 `;
 
-const AnswerButton = styled.button<ButtonProps>`
+const ButtonAnswer = styled.button<ButtonProps>`
   display: ${({ isOpened }) => (isOpened ? 'inline-flex' : 'none')};
   align-items: center;
   width: 100%;

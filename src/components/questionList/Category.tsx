@@ -23,30 +23,30 @@ const Category = ({
   handleClick,
 }: CategoryProps) => {
   return (
-    <CategoryItem>
-      <CategoryButton
+    <ItemCategory>
+      <ButtonCategory
         isSelected={isSelected}
         isActive={isActive}
         onClick={handleClick}
       >
         {category}
-      </CategoryButton>
-    </CategoryItem>
+      </ButtonCategory>
+    </ItemCategory>
   );
 };
 
-interface CategoryButtonProps {
+interface ButtonCategoryProps {
   isSelected: boolean;
   isActive: boolean;
 }
 
-const CategoryItem = styled.li`
+const ItemCategory = styled.li`
   max-width: ${pxToRem(250)};
   height: ${pxToRem(60)};
   margin: 0 auto;
 `;
 
-const CategoryButton = styled.button<CategoryButtonProps>`
+const ButtonCategory = styled.button<ButtonCategoryProps>`
   width: 100%;
   height: 100%;
   background-color: ${({ isSelected }) => (isSelected ? PRIMARY_400 : WHITE)};

@@ -4,12 +4,12 @@ import { pxToRem } from '@utils/pxToRem';
 import React from 'react';
 import Category from './Category';
 
-interface CategoryListProps {
+interface ListCategoryProps {
   selection: boolean[];
   categoryClick: (index: number) => () => void;
 }
 
-const CategoryList = ({ selection, categoryClick }: CategoryListProps) => {
+const ListCategory = ({ selection, categoryClick }: ListCategoryProps) => {
   return (
     <CategoryContainer>
       {CATEGORIES.map((category, index) => (
@@ -30,4 +30,4 @@ const CategoryContainer = styled.ul`
   padding: ${pxToRem(10)};
 `;
 
-export default React.memo(CategoryList);
+export default React.memo(ListCategory);

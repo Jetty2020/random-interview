@@ -1,8 +1,8 @@
 import type { NextPage } from 'next';
+import { useCallback, useState } from 'react';
 import PageTitle from '@components/common/PageTitle';
 import ListCategory from '@components/questionList/ListCategory';
 import { CATEGORIES } from '@constants/categories';
-import { useCallback, useState } from 'react';
 import ListQuestion from '@components/questionList/ListQuestion';
 import WrapperQuestion from '@components/questionList/WrapperQuestion';
 

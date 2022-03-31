@@ -1,7 +1,7 @@
-import { CATEGORIES } from '@constants/categories';
 import styled from '@emotion/styled';
-import { pxToRem } from '@utils/pxToRem';
 import React from 'react';
+import { CATEGORIES } from '@constants/categories';
+import { pxToRem } from '@utils/pxToRem';
 import Category from './Category';
 
 interface ListCategoryProps {

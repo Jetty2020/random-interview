@@ -1,43 +1,137 @@
-import PageTitle from '@components/common/PageTitle';
-import { PRIMARY_900, WHITE } from '@constants/colors';
+import { useForm } from 'react-hook-form';
 import styled from '@emotion/styled';
 import { NextPage } from 'next';
-import { useState } from 'react';
+import PageTitle from '@components/common/PageTitle';
+import { PRIMARY_900, RED_300, WHITE } from '@constants/colors';
+
+interface FormInputs {
+  all: boolean;
+  html: boolean;
+  css: boolean;
+  js: boolean;
+  web: boolean;
+  react: boolean;
+  quizCount: number;
+}
+// TODO: 서밑 disabled 추가, 카테고리 선택 안하고 버튼 눌렀을 때 에러 추가
 
 const RandomInterview: NextPage = () => {
+  const {
+    register,
+    getValues,
+    setValue,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormInputs>({
+    mode: 'onChange',
+  });
+
+  const handleAllOption = () => {
+    const { all } = getValues();
+    setValue('html', all);
+    setValue('css', all);
+    setValue('js', all);
+    setValue('web', all);
+    setValue('react', all);
+  };
+
+  const handleChangeOption = () => {
+    const { html, css, js, web, react } = getValues();
+    const checkAllOption = html && css && js && web && react;
+    setValue('all', checkAllOption);
+  };
+
+  const submitCategory = () => {
+    const { html, css, js, web, react } = getValues();
+    if (html || css || js || web || react) {
+      console.log('값존재 ');
+      console.log(getValues());
+    } else {
+      console.log('값x');
+    }
+  };
+
   return (
     <>
       <PageTitle title="랜덤 면접" />
       <ContainerForm>
-        <Form>
+        <Form onSubmit={handleSubmit(submitCategory)}>
           <label htmlFor="all">
-            <input id="all" type="checkbox" />
+            <input
+              id="all"
+              type="checkbox"
+              {...register('all', {
+                onChange: handleAllOption,
+              })}
+            />
             전체
           </label>
           <label htmlFor="html">
-            <input id="html" type="checkbox" />
+            <input
+              id="html"
+              type="checkbox"
+              {...register('html', {
+                onChange: handleChangeOption,
+              })}
+            />
             HTML
           </label>
           <label htmlFor="css">
-            <input id="css" type="checkbox" />
+            <input
+              id="css"
+              type="checkbox"
+              {...register('css', {
+                onChange: handleChangeOption,
+              })}
+            />
             CSS
           </label>
           <label htmlFor="js">
-            <input id="js" type="checkbox" />
+            <input
+              id="js"
+              type="checkbox"
+              {...register('js', {
+                onChange: handleChangeOption,
+              })}
+            />
             JS
           </label>
           <label htmlFor="web">
-            <input id="web" type="checkbox" />
+            <input
+              id="web"
+              type="checkbox"
+              {...register('web', {
+                onChange: handleChangeOption,
+              })}
+            />
             web
           </label>
           <label htmlFor="react">
-            <input id="react" type="checkbox" />
+            <input
+              id="react"
+              type="checkbox"
+              value={1}
+              {...register('react')}
+            />
             react
           </label>
           <LabelCount htmlFor="quizCount">
             질문 갯수 :
-            <InputCount id="quizCount" type="number" autoFocus />개
+            <InputCount
+              id="quizCount"
+              type="number"
+              autoFocus
+              {...register('quizCount', {
+                required: true,
+                onChange: handleChangeOption,
+                validate: { positive: (v) => v > 0 && v <= 100 },
+              })}
+            />
+            개
           </LabelCount>
+          {errors?.quizCount ? (
+            <TextError>질문의 갯수는 0이상 100이하 입니다</TextError>
+          ) : null}
           <BtnSubmit type="submit">submit</BtnSubmit>
         </Form>
       </ContainerForm>
@@ -64,19 +158,30 @@ const Form = styled.form`
 
 const LabelCount = styled.label`
   display: flex;
+  align-items: center;
   grid-column: 1 / span 6;
-  margin: 15px auto;
+  margin: 10px auto 20px;
 `;
 
 const InputCount = styled.input`
-  width: 300px;
-  margin-left: 10px;
+  width: 50px;
+  height: 25px;
+  margin: 10px;
   text-align: right;
+`;
+
+const TextError = styled.p`
+  grid-column: 1 / span 6;
+  text-align: center;
+  margin: -20px 0 20px;
+  font-size: 13px;
+  color: ${RED_300};
 `;
 
 const BtnSubmit = styled.button`
   grid-column: 1 / span 6;
   width: 200px;
+  height: 36px;
   margin: 0 auto;
   background-color: ${PRIMARY_900};
   font-size: 20px;

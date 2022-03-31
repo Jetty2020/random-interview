@@ -1,8 +1,8 @@
+import styled from '@emotion/styled';
+import React from 'react';
 import { CATEGORIES } from '@constants/categories';
 import { QUESTIONS } from '@constants/questions';
-import styled from '@emotion/styled';
 import { pxToRem } from '@utils/pxToRem';
-import React from 'react';
 import Question from './Question';
 
 interface ListQuestionProps {

@@ -1,3 +1,5 @@
+import styled from '@emotion/styled';
+import React from 'react';
 import {
   BLACK,
   PRIMARY_100,
@@ -5,9 +7,7 @@ import {
   PRIMARY_500,
   WHITE,
 } from '@constants/colors';
-import styled from '@emotion/styled';
 import { pxToRem } from '@utils/pxToRem';
-import React from 'react';
 
 interface CategoryProps {
   category: string;

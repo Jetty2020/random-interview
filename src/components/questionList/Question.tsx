@@ -1,3 +1,5 @@
+import styled from '@emotion/styled';
+import React, { useCallback, useState } from 'react';
 import {
   PRIMARY_400,
   PRIMARY_500,
@@ -5,9 +7,7 @@ import {
   SECONDARY_500,
   WHITE,
 } from '@constants/colors';
-import styled from '@emotion/styled';
 import { pxToRem } from '@utils/pxToRem';
-import React, { useCallback, useState } from 'react';
 
 interface QuestionProps {
   question: string;

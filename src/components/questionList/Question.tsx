@@ -16,9 +16,11 @@ interface QuestionProps {
 
 const Question = ({ question, answer }: QuestionProps) => {
   const [isOpened, setIsOpened] = useState<boolean>(false);
+
   const handleClick = useCallback(() => {
     setIsOpened((state) => !state);
   }, []);
+
   return (
     <ItemQuestion>
       <ButtonQuestion onClick={handleClick} isOpened={isOpened}>

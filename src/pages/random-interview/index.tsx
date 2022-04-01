@@ -151,6 +151,10 @@ const RandomInterview: NextPage = () => {
             시작하기
           </BtnSubmit>
         </Form>
+        <Notice>
+          카테고리에 있는 문제보다 많은 질문 개수를 선택할 시, 해당 카테고리에
+          있는 모든 문제가 출제됩니다
+        </Notice>
       </ContainerForm>
     </>
   );
@@ -160,7 +164,9 @@ export default RandomInterview;
 
 const ContainerForm = styled.div`
   display: flex;
+  flex-direction: column;
   height: 100vh;
+  justify-content: center;
   align-items: center;
 `;
 const Form = styled.form`
@@ -210,4 +216,9 @@ const BtnSubmit = styled.button`
   &:disabled {
     background-color: ${GRAY_300};
   }
+`;
+
+const Notice = styled.div`
+  margin-top: 5px;
+  color: ${RED_300};
 `;

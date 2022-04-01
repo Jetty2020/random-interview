@@ -13,7 +13,7 @@ interface FormInputs {
   react: boolean;
   quizCount: number;
 }
-// TODO: 서밑 disabled 추가, 카테고리 선택 안하고 버튼 눌렀을 때 에러 추가
+// TODO: 서밑 disabled 추가, 카테고리 선택 안하고 버튼 눌렀을 때 에러 추가, 문제 개수가 부족할 때의 에러처리
 
 const RandomInterview: NextPage = () => {
   const {
@@ -24,6 +24,15 @@ const RandomInterview: NextPage = () => {
     formState: { errors },
   } = useForm<FormInputs>({
     mode: 'onChange',
+    defaultValues: {
+      all: true,
+      html: true,
+      css: true,
+      js: true,
+      web: true,
+      react: true,
+      quizCount: 0,
+    },
   });
 
   const handleAllOption = () => {
@@ -116,7 +125,7 @@ const RandomInterview: NextPage = () => {
             react
           </label>
           <LabelCount htmlFor="quizCount">
-            질문 갯수 :
+            질문 개수 :
             <InputCount
               id="quizCount"
               type="number"
@@ -130,9 +139,9 @@ const RandomInterview: NextPage = () => {
             개
           </LabelCount>
           {errors?.quizCount ? (
-            <TextError>질문의 갯수는 0이상 100이하 입니다</TextError>
+            <TextError>질문의 개수는 1이상 100이하 입니다</TextError>
           ) : null}
-          <BtnSubmit type="submit">submit</BtnSubmit>
+          <BtnSubmit type="submit">시작하기</BtnSubmit>
         </Form>
       </ContainerForm>
     </>

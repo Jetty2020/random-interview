@@ -68,12 +68,6 @@ const RandomInterview: NextPage = () => {
     } else {
       console.log('작동');
     }
-    // if (html || css || js || web || react) {
-    //   console.log('값존재 ');
-    //   console.log(getValues());
-    // } else {
-    //   console.log('값x');
-    // }
   };
 
   return (

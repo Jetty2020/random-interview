@@ -2,7 +2,8 @@ import { useForm } from 'react-hook-form';
 import styled from '@emotion/styled';
 import { NextPage } from 'next';
 import PageTitle from '@components/common/PageTitle';
-import { PRIMARY_900, RED_300, WHITE } from '@constants/colors';
+import { GRAY_300, PRIMARY_900, RED_300, WHITE } from '@constants/colors';
+import { useState } from 'react';
 
 interface FormInputs {
   all: boolean;
@@ -13,16 +14,11 @@ interface FormInputs {
   react: boolean;
   quizCount: number;
 }
-// TODO: 서밑 disabled 추가, 카테고리 선택 안하고 버튼 눌렀을 때 에러 추가, 문제 개수가 부족할 때의 에러처리
+// TODO: 문제 개수가 부족할 때의 에러처리, 문제 수를 정하는 로직이 만들어지면 버튼 아래에 안내문구 UI 추가
 
 const RandomInterview: NextPage = () => {
-  const {
-    register,
-    getValues,
-    setValue,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormInputs>({
+  const [errMsg, setErrMsg] = useState('');
+  const { register, getValues, setValue, handleSubmit } = useForm<FormInputs>({
     mode: 'onChange',
     defaultValues: {
       all: true,
@@ -31,7 +27,7 @@ const RandomInterview: NextPage = () => {
       js: true,
       web: true,
       react: true,
-      quizCount: 0,
+      quizCount: 10,
     },
   });
 
@@ -42,22 +38,42 @@ const RandomInterview: NextPage = () => {
     setValue('js', all);
     setValue('web', all);
     setValue('react', all);
+
+    if (errMsg === '카테고리를 선택해주세요') {
+      setErrMsg('');
+    }
   };
 
   const handleChangeOption = () => {
     const { html, css, js, web, react } = getValues();
     const checkAllOption = html && css && js && web && react;
     setValue('all', checkAllOption);
+
+    if (errMsg === '카테고리를 선택해주세요') {
+      setErrMsg('');
+    }
   };
 
-  const submitCategory = () => {
-    const { html, css, js, web, react } = getValues();
-    if (html || css || js || web || react) {
-      console.log('값존재 ');
-      console.log(getValues());
-    } else {
-      console.log('값x');
+  const handleChangeInput = () => {
+    if (errMsg === '질문의 개수는 1이상 100이하 입니다') {
+      setErrMsg('');
     }
+  };
+  const submitCategory = () => {
+    const { html, css, js, web, react, quizCount } = getValues();
+    if (!(html || css || js || web || react)) {
+      setErrMsg('카테고리를 선택해주세요');
+    } else if (quizCount < 1 || quizCount > 100 || !quizCount) {
+      setErrMsg('질문의 개수는 1이상 100이하 입니다');
+    } else {
+      console.log('작동');
+    }
+    // if (html || css || js || web || react) {
+    //   console.log('값존재 ');
+    //   console.log(getValues());
+    // } else {
+    //   console.log('값x');
+    // }
   };
 
   return (
@@ -131,17 +147,15 @@ const RandomInterview: NextPage = () => {
               type="number"
               autoFocus
               {...register('quizCount', {
-                required: true,
-                onChange: handleChangeOption,
-                validate: { positive: (v) => v > 0 && v <= 100 },
+                onChange: handleChangeInput,
               })}
             />
             개
           </LabelCount>
-          {errors?.quizCount ? (
-            <TextError>질문의 개수는 1이상 100이하 입니다</TextError>
-          ) : null}
-          <BtnSubmit type="submit">시작하기</BtnSubmit>
+          {errMsg ? <TextError>{errMsg}</TextError> : null}
+          <BtnSubmit type="submit" disabled={Boolean(errMsg)}>
+            시작하기
+          </BtnSubmit>
         </Form>
       </ContainerForm>
     </>
@@ -198,4 +212,8 @@ const BtnSubmit = styled.button`
   line-height: 1.6;
   color: ${WHITE};
   border-radius: 10px;
+
+  &:disabled {
+    background-color: ${GRAY_300};
+  }
 `;

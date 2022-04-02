@@ -78,7 +78,7 @@ export const SettingForm = () => {
   };
 
   return (
-    <ContainerForm>
+    <>
       <Form onSubmit={handleSubmit(submitCategory)}>
         <label htmlFor="all">
           <input
@@ -155,17 +155,10 @@ export const SettingForm = () => {
         카테고리에 있는 문제보다 많은 질문 개수를 선택할 시, 해당 카테고리에
         있는 모든 문제가 출제됩니다
       </Notice>
-    </ContainerForm>
+    </>
   );
 };
 
-const ContainerForm = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  justify-content: center;
-  align-items: center;
-`;
 const Form = styled.form`
   display: grid;
   grid-template-columns: repeat(6, 1fr);

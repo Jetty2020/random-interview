@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import { NextPage } from 'next';
+import { useRouter } from 'next/router';
 import PageTitle from '@components/common/PageTitle';
 import { GRAY_300, PRIMARY_900, RED_300, WHITE } from '@constants/colors';
 import { pxToRem } from '@utils/pxToRem';
@@ -18,6 +19,7 @@ interface FormInputs {
 // TODO: 문제 개수가 부족할 때의 에러처리, 문제 수를 정하는 로직이 만들어지면 버튼 아래에 안내문구 UI 추가
 
 const RandomInterview: NextPage = () => {
+  const router = useRouter();
   const [errMsg, setErrMsg] = useState('');
   const { register, getValues, setValue, handleSubmit } = useForm<FormInputs>({
     mode: 'onChange',
@@ -67,7 +69,14 @@ const RandomInterview: NextPage = () => {
     } else if (quizCount < 1 || quizCount > 100) {
       setErrMsg('질문의 개수는 1이상 100이하 입니다');
     } else {
-      console.log('작동');
+      const checkedOptionArr = [html, css, js, web, react];
+      const checkedOptionLen = checkedOptionArr.filter((ele) => ele).length;
+      const minQuizArr = checkedOptionArr.map(
+        (ele) => Math.floor(quizCount / checkedOptionLen) * +ele,
+      );
+      // TODO: 문제 개수가 가장 많은 카테고리에 나머지 문제 개수 추가 / (quizCount % checkedOptionLen)
+      const query = minQuizArr.join('_');
+      router.push(`random-interview?question=${query}`);
     }
   };
 

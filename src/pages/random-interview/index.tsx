@@ -1,9 +1,10 @@
-import { useForm } from 'react-hook-form';
 import styled from '@emotion/styled';
+import { useForm } from 'react-hook-form';
+import { useState } from 'react';
 import { NextPage } from 'next';
 import PageTitle from '@components/common/PageTitle';
 import { GRAY_300, PRIMARY_900, RED_300, WHITE } from '@constants/colors';
-import { useState } from 'react';
+import { pxToRem } from '@utils/pxToRem';
 
 interface FormInputs {
   all: boolean;
@@ -63,7 +64,7 @@ const RandomInterview: NextPage = () => {
     const { html, css, js, web, react, quizCount } = getValues();
     if (!(html || css || js || web || react)) {
       setErrMsg('카테고리를 선택해주세요');
-    } else if (quizCount < 1 || quizCount > 100 || !quizCount) {
+    } else if (quizCount < 1 || quizCount > 100) {
       setErrMsg('질문의 개수는 1이상 100이하 입니다');
     } else {
       console.log('작동');
@@ -173,9 +174,9 @@ const Form = styled.form`
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   text-align: center;
-  width: 600px;
+  width: ${pxToRem(600)};
   margin: 0 auto;
-  padding: 35px;
+  padding: ${pxToRem(35)};
   border: 3px double ${PRIMARY_900};
 `;
 
@@ -183,35 +184,35 @@ const LabelCount = styled.label`
   display: flex;
   align-items: center;
   grid-column: 1 / span 6;
-  margin: 10px auto 20px;
+  margin: ${pxToRem(10)} auto ${pxToRem(20)};
 `;
 
 const InputCount = styled.input`
-  width: 50px;
-  height: 25px;
-  margin: 10px;
+  width: ${pxToRem(50)};
+  height: ${pxToRem(25)};
+  margin: ${pxToRem(10)};
   text-align: right;
 `;
 
 const TextError = styled.p`
   grid-column: 1 / span 6;
   text-align: center;
-  margin: -20px 0 20px;
-  font-size: 13px;
+  margin: ${pxToRem(-20)} 0 ${pxToRem(20)};
+  font-size: ${pxToRem(13)};
   color: ${RED_300};
 `;
 
 const BtnSubmit = styled.button`
   grid-column: 1 / span 6;
-  width: 200px;
-  height: 36px;
+  width: ${pxToRem(200)};
+  height: ${pxToRem(36)};
   margin: 0 auto;
   background-color: ${PRIMARY_900};
-  font-size: 20px;
+  font-size: ${pxToRem(20)};
   font-weight: 600;
   line-height: 1.6;
   color: ${WHITE};
-  border-radius: 10px;
+  border-radius: ${pxToRem(10)};
 
   &:disabled {
     background-color: ${GRAY_300};
@@ -219,6 +220,6 @@ const BtnSubmit = styled.button`
 `;
 
 const Notice = styled.div`
-  margin-top: 5px;
+  margin-top: ${pxToRem(5)};
   color: ${RED_300};
 `;

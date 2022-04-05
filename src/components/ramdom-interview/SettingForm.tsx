@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
 import styled from '@emotion/styled';
 import { GRAY_300, PRIMARY_900, RED_300, WHITE } from '@constants/colors';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import router from 'next/router';
 import { QUESTIONS } from '@constants/questions';
 import { CATEGORIES } from '@constants/categories';

@@ -3,6 +3,7 @@ import router from 'next/router';
 import { GRAY_400, PRIMARY_200, PRIMARY_900, WHITE } from '@constants/colors';
 import { CATEGORIES } from '@constants/categories';
 import { QUESTIONS } from '@constants/questions';
+import { useMemo, useState } from 'react';
 
 const selectIndex = (totalIndex: number, selectingNumber: number) => {
   const randomIndexArray = [];
@@ -19,42 +20,104 @@ const selectIndex = (totalIndex: number, selectingNumber: number) => {
 
 export const StartInterview = () => {
   const { question } = router.query;
+  const [questionContent, setQuestionContent] = useState([0, 0]);
+
   const questionQueryArr =
     question
       ?.toString()
       .split('_')
       .map((ele) => +ele) || [];
-  const quizCountOfCategory = questionQueryArr.map((ele, idx) =>
-    ele > 0
-      ? QUESTIONS.filter((question) => question.category === CATEGORIES[idx])
-          .length
-      : 0,
-  );
-  const questionArr = questionQueryArr.map((ele, idx) =>
-    selectIndex(quizCountOfCategory[idx], ele),
+
+  const [progressArr, setProgressArr] = useState(
+    Array(questionQueryArr.length).fill(0).fill(1, 0, 1),
   );
 
-  console.log(questionArr);
+  const quizCountOfCategory = useMemo(
+    () =>
+      questionQueryArr.map((ele, idx) =>
+        ele > 0
+          ? QUESTIONS.filter(
+              (question) => question.category === CATEGORIES[idx],
+            ).length
+          : 0,
+      ),
+    [],
+  );
+
+  const questionArr = useMemo(
+    () =>
+      questionQueryArr.map((ele, idx) =>
+        selectIndex(quizCountOfCategory[idx], ele),
+      ),
+    [],
+  );
+
+  const handleNextQuestion = () => {
+    if (
+      questionQueryArr[questionContent[0]] ===
+        progressArr[questionContent[0]] &&
+      questionQueryArr.length - 1 === questionContent[0]
+    ) {
+      router.push('/random-interview?question-list');
+    } else if (
+      questionQueryArr[questionContent[0]] === progressArr[questionContent[0]]
+    ) {
+      let check = 1;
+      while (questionQueryArr[questionContent[0] + check] === 0) {
+        check += 1;
+      }
+      const newState = [questionContent[0] + check, 0];
+      const newProgress = progressArr.concat();
+      newProgress[questionContent[0] + check] = 1;
+      setQuestionContent(newState);
+      setProgressArr(newProgress);
+    } else {
+      const newState = questionContent.concat();
+      newState[1] += 1;
+      const newProgress = progressArr.concat();
+      newProgress[questionContent[0]] += 1;
+
+      setQuestionContent(newState);
+      setProgressArr(newProgress);
+    }
+  };
 
   return (
     <Container>
       <ListQuestionNum>
         {CATEGORIES.map((ele, idx) => {
-          return (
-            <ItemQuestionNum key={Math.random()}>
-              <TitleCategory>{ele}</TitleCategory>
-              <span>0/{questionQueryArr[idx]}</span>
-            </ItemQuestionNum>
-          );
+          if (questionQueryArr[idx]) {
+            return (
+              <ItemQuestionNum key={Math.random()}>
+                <TitleCategory>{ele}</TitleCategory>
+                <span>
+                  {progressArr[idx]}/{questionQueryArr[idx]}
+                </span>
+              </ItemQuestionNum>
+            );
+          }
+          return null;
         })}
       </ListQuestionNum>
       <Container>
-        <ContentQuestion>Q1. DOCTYPE 이란 무엇인가요?</ContentQuestion>
+        <ContentQuestion>
+          {
+            QUESTIONS.filter(
+              (ele) => ele.category === CATEGORIES[questionContent[0]],
+            )[questionArr[questionContent[0]][questionContent[1]]]?.question
+          }
+        </ContentQuestion>
         <Video />
       </Container>
       <BtnContainer>
         <Btn type="button">종료하기</Btn>
-        <Btn type="button">다음 질문</Btn>
+        <Btn type="button" onClick={handleNextQuestion}>
+          {questionQueryArr[questionContent[0]] ===
+            progressArr[questionContent[0]] &&
+          questionQueryArr.length - 1 === questionContent[0]
+            ? '질문 리스트 보기'
+            : '다음 질문'}
+        </Btn>
       </BtnContainer>
     </Container>
   );

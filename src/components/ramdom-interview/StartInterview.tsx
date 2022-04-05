@@ -62,7 +62,6 @@ export const StartInterview = ({
         selectIndex(quizCountOfCategory[idx], ele),
       ),
     );
-    console.log('questionArr', questionArr);
   }, []);
 
   const handleNextQuestion = () => {

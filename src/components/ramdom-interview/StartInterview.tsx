@@ -1,9 +1,9 @@
 import styled from '@emotion/styled';
 import router from 'next/router';
+import { useEffect, useMemo, useState } from 'react';
 import { GRAY_400, PRIMARY_200, PRIMARY_900, WHITE } from '@constants/colors';
 import { CATEGORIES } from '@constants/categories';
 import { QUESTIONS } from '@constants/questions';
-import { useMemo, useState } from 'react';
 
 const selectIndex = (totalIndex: number, selectingNumber: number) => {
   const randomIndexArray = [];
@@ -18,18 +18,30 @@ const selectIndex = (totalIndex: number, selectingNumber: number) => {
   return randomIndexArray;
 };
 
-export const StartInterview = () => {
-  const { question } = router.query;
-  const [questionContent, setQuestionContent] = useState([0, 0]);
+interface StartInterviewProps {
+  questionArr: number[][];
+  setQuestionArr: (value: number[][]) => void;
+}
 
+export const StartInterview = ({
+  questionArr,
+  setQuestionArr,
+}: StartInterviewProps) => {
+  const { question } = router.query;
+  console.log('question', question);
+  const [questionContent, setQuestionContent] = useState([0, 0]);
   const questionQueryArr =
     question
       ?.toString()
       .split('_')
       .map((ele) => +ele) || [];
-
+  const firstStartCategory = questionQueryArr.findIndex((e) => e !== 0);
+  console.log(`firstStartCategory ${firstStartCategory}`);
+  console.log('questionQueryArr', questionQueryArr);
   const [progressArr, setProgressArr] = useState(
-    Array(questionQueryArr.length).fill(0).fill(1, 0, 1),
+    Array(questionQueryArr.length)
+      .fill(0)
+      .fill(1, firstStartCategory, firstStartCategory + 1),
   );
 
   const quizCountOfCategory = useMemo(
@@ -44,13 +56,14 @@ export const StartInterview = () => {
     [],
   );
 
-  const questionArr = useMemo(
-    () =>
+  useEffect(() => {
+    setQuestionArr(
       questionQueryArr.map((ele, idx) =>
         selectIndex(quizCountOfCategory[idx], ele),
       ),
-    [],
-  );
+    );
+    console.log('questionArr', questionArr);
+  }, []);
 
   const handleNextQuestion = () => {
     if (

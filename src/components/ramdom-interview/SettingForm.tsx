@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import styled from '@emotion/styled';
 import { GRAY_300, PRIMARY_900, RED_300, WHITE } from '@constants/colors';
 import { useRef, useState } from 'react';
-import router, { useRouter } from 'next/router';
+import router from 'next/router';
 import { QUESTIONS } from '@constants/questions';
 import { CATEGORIES } from '@constants/categories';
 
@@ -15,12 +15,8 @@ interface FormInputs {
   react: boolean;
   quizCount: number;
 }
-// TODO: 문제 개수가 부족할 때의 에러처리, 문제 수를 정하는 로직이 만들어지면 버튼 아래에 안내문구 UI 추가
 
 export const SettingForm = () => {
-  const QuestionsCount = QUESTIONS.length;
-  const TotalQuizCount = useRef(QuestionsCount);
-  // console.log(`TotalQuizCount: ${TotalQuizCount}`);
   const [errMsg, setErrMsg] = useState('');
   const { register, getValues, setValue, handleSubmit } = useForm<FormInputs>({
     mode: 'onChange',
@@ -47,7 +43,6 @@ export const SettingForm = () => {
       setErrMsg('');
     }
   };
-  // 전역변수 생성
 
   const handleChangeOption = () => {
     const { html, css, js, web, react } = getValues();
@@ -124,8 +119,6 @@ export const SettingForm = () => {
           }
         }
       }
-      // console.log(`quizCountOfCategory: ${quizCountOfCategory}`);
-      // console.log(`distributedQuizArr ${distributedQuizArr}`);
 
       const query = distributedQuizArr.join('_');
       router.push(`random-interview?question=${query}`);

@@ -1,8 +1,10 @@
 import { useForm } from 'react-hook-form';
 import styled from '@emotion/styled';
 import { GRAY_300, PRIMARY_900, RED_300, WHITE } from '@constants/colors';
-import { useState } from 'react';
-import { useRouter } from 'next/router';
+import { useRef, useState } from 'react';
+import router, { useRouter } from 'next/router';
+import { QUESTIONS } from '@constants/questions';
+import { CATEGORIES } from '@constants/categories';
 
 interface FormInputs {
   all: boolean;
@@ -16,7 +18,9 @@ interface FormInputs {
 // TODO: 문제 개수가 부족할 때의 에러처리, 문제 수를 정하는 로직이 만들어지면 버튼 아래에 안내문구 UI 추가
 
 export const SettingForm = () => {
-  const router = useRouter();
+  const QuestionsCount = QUESTIONS.length;
+  const TotalQuizCount = useRef(QuestionsCount);
+  // console.log(`TotalQuizCount: ${TotalQuizCount}`);
   const [errMsg, setErrMsg] = useState('');
   const { register, getValues, setValue, handleSubmit } = useForm<FormInputs>({
     mode: 'onChange',
@@ -43,6 +47,7 @@ export const SettingForm = () => {
       setErrMsg('');
     }
   };
+  // 전역변수 생성
 
   const handleChangeOption = () => {
     const { html, css, js, web, react } = getValues();
@@ -55,24 +60,74 @@ export const SettingForm = () => {
   };
 
   const handleChangeInput = () => {
-    if (errMsg === '질문의 개수는 1이상 100이하 입니다') {
+    if (errMsg !== '카테고리를 선택해주세요') {
       setErrMsg('');
     }
   };
   const submitCategory = () => {
     const { html, css, js, web, react, quizCount } = getValues();
+    const checkedOptionArr = [html, css, js, web, react];
+    const reducer = (accumulator: number, curr: number) => accumulator + curr;
+
+    // 데이터 카테고리의 문제 개수를 세준다.
+    const quizCountOfCategory = checkedOptionArr.map((ele, idx) =>
+      ele
+        ? QUESTIONS.filter((question) => question.category === CATEGORIES[idx])
+            .length
+        : 0,
+    );
+    const maxQuizCount = quizCountOfCategory.reduce(reducer);
     if (!(html || css || js || web || react)) {
       setErrMsg('카테고리를 선택해주세요');
-    } else if (quizCount < 1 || quizCount > 100 || !quizCount) {
-      setErrMsg('질문의 개수는 1이상 100이하 입니다');
-    } else {
-      const checkedOptionArr = [html, css, js, web, react];
-      const checkedOptionLen = checkedOptionArr.filter((ele) => ele).length;
-      const minQuizArr = checkedOptionArr.map(
-        (ele) => Math.floor(quizCount / checkedOptionLen) * +ele,
+    } else if (quizCount < 1 || quizCount > maxQuizCount || !quizCount) {
+      setErrMsg(
+        `선택한 카테고리에서 가능한 질문 개수는 1이상 ${maxQuizCount}이하 입니다`,
       );
-      // TODO: 문제 개수가 가장 많은 카테고리에 나머지 문제 개수 추가 / (quizCount % checkedOptionLen)
-      const query = minQuizArr.join('_');
+    } else {
+      // 유저가 선택한 카테고리 개수
+      const checkedCategoryLen = checkedOptionArr.filter((ele) => ele).length;
+      // 균등분배
+      const sameCount = Math.floor(quizCount / checkedCategoryLen);
+      // 나머지
+      const remainedCount = quizCount % checkedCategoryLen;
+      // 가장 많은 문제를 가진 카테고리의 인덱스
+      const idxOfMax = quizCountOfCategory.indexOf(
+        Math.max(...quizCountOfCategory),
+      );
+
+      const distributedQuizArr = quizCountOfCategory.map((e, i) => {
+        // 나머지가 있는 경우에만,
+        if (i === idxOfMax && e >= sameCount + remainedCount) {
+          return sameCount + remainedCount;
+        }
+        if (i === idxOfMax && e >= sameCount) {
+          return e;
+        }
+        if (e >= sameCount) {
+          return sameCount;
+        }
+        return e;
+      });
+      // 추가
+      const arrSum = distributedQuizArr.reduce(reducer);
+
+      let diff = quizCount - arrSum;
+      if (diff > 0) {
+        for (let i = 0; i < distributedQuizArr.length; i++) {
+          if (diff === 0) {
+            break;
+          }
+          if (diff > 0 && quizCountOfCategory[i] > distributedQuizArr[i]) {
+            const sumDiff = quizCountOfCategory[i] - distributedQuizArr[i];
+            distributedQuizArr[i] += sumDiff;
+            diff -= sumDiff;
+          }
+        }
+      }
+      // console.log(`quizCountOfCategory: ${quizCountOfCategory}`);
+      // console.log(`distributedQuizArr ${distributedQuizArr}`);
+
+      const query = distributedQuizArr.join('_');
       router.push(`random-interview?question=${query}`);
     }
   };
@@ -139,6 +194,7 @@ export const SettingForm = () => {
           <InputCount
             id="quizCount"
             type="number"
+            min="1"
             autoFocus
             {...register('quizCount', {
               onChange: handleChangeInput,

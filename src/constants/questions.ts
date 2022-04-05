@@ -39,4 +39,44 @@ export const QUESTIONS = [
     answer: '답변8',
     category: '기타',
   },
+  {
+    question: '질문9',
+    answer: '답변9',
+    category: 'React',
+  },
+  {
+    question: '질문10',
+    answer: '답변10',
+    category: 'Web',
+  },
+  {
+    question: '질문11',
+    answer: '답변11',
+    category: 'CSS',
+  },
+  {
+    question: '질문12',
+    answer: '답변12',
+    category: 'HTML',
+  },
+  {
+    question: '질문13',
+    answer: '답변13',
+    category: 'React',
+  },
+  {
+    question: '질문14',
+    answer: '답변14',
+    category: 'JS',
+  },
+  {
+    question: '질문15',
+    answer: '답변15',
+    category: 'Web',
+  },
+  {
+    question: '질문16',
+    answer: '답변16',
+    category: 'Web',
+  },
 ];

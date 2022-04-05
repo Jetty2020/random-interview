@@ -1,20 +1,36 @@
+import styled from '@emotion/styled';
+import { useState } from 'react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import PageTitle from '@components/common/PageTitle';
-import styled from '@emotion/styled';
 import { SettingForm } from '@components/ramdom-interview/SettingForm';
 import { StartInterview } from '@components/ramdom-interview/StartInterview';
+import { QuestionList } from '@components/ramdom-interview/QuestionList';
 
 const RandomInterview: NextPage = () => {
   const router = useRouter();
-  const questionQueryArr = router.query.question;
+  const { question, 'question-list': questionList } = router.query;
+  const [questionArr, setQuestionArr] = useState<number[][]>([[]]);
+
+  const page = () => {
+    if (question) {
+      return (
+        <StartInterview
+          questionArr={questionArr}
+          setQuestionArr={setQuestionArr}
+        />
+      );
+    }
+    if (questionList === '') {
+      return <QuestionList questionArr={questionArr} />;
+    }
+    return <SettingForm />;
+  };
 
   return (
     <>
       <PageTitle title="랜덤 면접" />
-      <ContainerForm>
-        {!questionQueryArr ? <SettingForm /> : <StartInterview />}
-      </ContainerForm>
+      <ContainerForm>{page()}</ContainerForm>
     </>
   );
 };

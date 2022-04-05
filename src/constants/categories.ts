@@ -1,1 +1,1 @@
-export const CATEGORIES = ['HTML', 'CSS', 'JavaScript', 'React', 'Web'];
+export const CATEGORIES = ['HTML', 'CSS', 'JS', 'React', 'Web'];

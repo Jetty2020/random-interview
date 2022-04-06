@@ -17,9 +17,9 @@ export function InterviewPage() {
             면접 태도를 바로잡으며 실전 연습을 할 수 있어요.
           </Styled.TextIntro>
           <Link href="/">
-            <Styled.LinkBtn backgroundColor={WHITE} color="#444" content="☝">
+            <Styled.AnchorBtn backgroundColor={WHITE} color="#444" content="☝">
               체험하기
-            </Styled.LinkBtn>
+            </Styled.AnchorBtn>
           </Link>
         </Styled.ContainerText>
         <Styled.ImgIntro src="https://d1unjqcospf8gs.cloudfront.net/assets/home/main/3x/image-top-68ba12f0da7b5af9a574ed92ca8b3a9c0068db176b566dd374ee50359693358b.png" />

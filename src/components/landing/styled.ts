@@ -52,7 +52,7 @@ export const TextIntro = styled.p`
   line-height: 24px;
 `;
 
-export const LinkBtn = styled.a<LinkButtonProps>`
+export const AnchorBtn = styled.a<LinkButtonProps>`
   display: inline-block;
   width: 170px;
   height: 50px;

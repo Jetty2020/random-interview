@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import Link from 'next/link';
 import { WHITE } from '@constants/colors';
+import { pxToRem } from '@utils/pxToRem';
 
 function HeaderPage() {
   return (
@@ -37,14 +38,14 @@ const HeaderBar = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  max-width: 1024px;
+  max-width: ${pxToRem(1140)};
   margin: 0 auto;
 `;
 
 const ImgLogo = styled.img`
   display: inline-block;
-  padding: 5px 0;
-  width: 150px;
+  padding: ${pxToRem(5)} 0;
+  width: ${pxToRem(150)};
 
   vertical-align: text-bottom;
 `;
@@ -56,17 +57,17 @@ const ListMenu = styled.ul`
 
 const ItemMenu = styled.li`
   position: relative;
-  margin-left: 30px;
+  margin-left: ${pxToRem(30)};
   color: #757575;
-  font-size: 15px;
+  font-size: ${pxToRem(15)};
   font-weight: 700;
   &:not(:first-of-type) {
     &::before {
       position: absolute;
       top: 50%;
-      left: -13px;
+      left: -${pxToRem(13)};
       width: 1px;
-      height: 12px;
+      height: ${pxToRem(12)};
       background-color: #656a71;
       transform: translateY(-50%);
       content: '';

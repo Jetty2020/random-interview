@@ -65,7 +65,7 @@ export const AnchorBtn = styled.a<LinkButtonProps>`
   background: ${(props) => props.backgroundColor};
 
   &::after {
-    content: '👀';
+    content: '☝';
     display: inline-block;
     margin-left: ${pxToRem(5)};
     font-weight: bold;

@@ -15,17 +15,17 @@ const ListQuestion = ({ selection }: ListQuestionProps) => {
     : CATEGORIES.filter((_, i) => selection[i]);
 
   return (
-    <ContainerQuestion>
+    <Container>
       {QUESTIONS.filter(({ category }) => categories.includes(category)).map(
         ({ question, answer }) => (
           <Question key={question} question={question} answer={answer} />
         ),
       )}
-    </ContainerQuestion>
+    </Container>
   );
 };
 
-const ContainerQuestion = styled.ul`
+const Container = styled.ul`
   padding: ${pxToRem(10)} ${pxToRem(20)};
 
   & li:not(:last-of-type) {

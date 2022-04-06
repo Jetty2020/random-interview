@@ -11,7 +11,7 @@ interface ListCategoryProps {
 
 const ListCategory = ({ selection, categoryClick }: ListCategoryProps) => {
   return (
-    <CategoryContainer>
+    <Container>
       {CATEGORIES.map((category, index) => (
         <Category
           key={category}
@@ -21,11 +21,11 @@ const ListCategory = ({ selection, categoryClick }: ListCategoryProps) => {
           handleClick={categoryClick(index)}
         />
       ))}
-    </CategoryContainer>
+    </Container>
   );
 };
 
-const CategoryContainer = styled.ul`
+const Container = styled.ul`
   max-width: ${pxToRem(300)};
   padding: ${pxToRem(10)};
 `;

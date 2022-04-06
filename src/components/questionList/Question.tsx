@@ -22,7 +22,7 @@ const Question = ({ question, answer }: QuestionProps) => {
   }, []);
 
   return (
-    <ItemQuestion>
+    <Item>
       <ButtonQuestion onClick={handleClick} isOpened={isOpened}>
         <QuestionMark>Q.</QuestionMark>
         <Text>{question}</Text>
@@ -31,7 +31,7 @@ const Question = ({ question, answer }: QuestionProps) => {
         <AnswerMark>A.</AnswerMark>
         <Text>{answer}</Text>
       </ButtonAnswer>
-    </ItemQuestion>
+    </Item>
   );
 };
 
@@ -39,7 +39,7 @@ interface ButtonProps {
   isOpened: boolean;
 }
 
-const ItemQuestion = styled.li`
+const Item = styled.li`
   margin: 0 auto;
 `;
 

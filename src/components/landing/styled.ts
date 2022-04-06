@@ -40,7 +40,7 @@ export const ContainerText = styled.div`
   flex-basis: 40%;
 `;
 
-export const TextLogo = styled.h2`
+export const HeaderLogo = styled.h2`
   font-size: 45px;
   font-weight: 900;
   margin-bottom: 30px;

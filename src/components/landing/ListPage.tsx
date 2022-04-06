@@ -11,7 +11,7 @@ export function ListPage() {
           left
         />
         <Styled.ContainerText>
-          <Styled.TextLogo>질문 리스트</Styled.TextLogo>
+          <Styled.HeaderLogo>질문 리스트</Styled.HeaderLogo>
           <Styled.TextIntro>
             원하는 스택을 골라서 면접 질문과 추천 답변까지 <br />
             프론트엔드 면접 질문에 대한 다양한 가이드를 제공해 드려요.

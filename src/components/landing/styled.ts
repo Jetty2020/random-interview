@@ -63,6 +63,7 @@ export const AnchorBtn = styled.a<LinkButtonProps>`
   text-align: center;
   border-radius: 25px;
   background: ${(props) => props.backgroundColor};
+
   &::after {
     content: '👀';
     display: inline-block;

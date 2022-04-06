@@ -1,11 +1,6 @@
 import type { NextPage } from 'next';
 import PageTitle from '@components/common/PageTitle';
-import {
-  PageIntro,
-  ListPage,
-  Example,
-  InterviewPage,
-} from '@components/landing';
+import { PageIntro, ListPage, InterviewPage } from '@components/landing';
 
 const Home: NextPage = () => {
   return (
@@ -14,7 +9,6 @@ const Home: NextPage = () => {
       <PageIntro />
       <ListPage />
       <InterviewPage />
-      {/* <Example /> */}
     </>
   );
 };

@@ -22,7 +22,7 @@ const Select: NextPage = () => {
   });
   const { recordMethod, audioInput, videoInput } = optionValue;
 
-  const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
+  const handleOptionChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
     setOptionValue({
       ...optionValue,
@@ -59,7 +59,7 @@ const Select: NextPage = () => {
           id="recordMethod"
           name="recordMethod"
           value={recordMethod}
-          onChange={handleChange}
+          onChange={handleOptionChange}
           aria-label="기록 방식 선택"
         >
           <option value="none">없음</option>
@@ -77,7 +77,7 @@ const Select: NextPage = () => {
             name="audioInput"
             ref={audioInputRef}
             value={audioInput}
-            onChange={handleChange}
+            onChange={handleOptionChange}
             aria-label="오디오 장치 선택"
           >
             {audioDevices.map((device) => (
@@ -97,7 +97,7 @@ const Select: NextPage = () => {
             name="videoInput"
             ref={videoInputRef}
             value={videoInput}
-            onChange={handleChange}
+            onChange={handleOptionChange}
             aria-label="비디오 장치 선택"
           >
             {videoDevices.map((device) => (

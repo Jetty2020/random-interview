@@ -19,13 +19,13 @@ export function ListPage() {
             <br />
           </Styled.TextIntro>
           <Link href="/">
-            <Styled.LinkBtn
+            <Styled.AnchorBtn
               backgroundColor={PRIMARY_200}
               color="#444"
               content="☝"
             >
               체험하기
-            </Styled.LinkBtn>
+            </Styled.AnchorBtn>
           </Link>
         </Styled.ContainerText>
       </Styled.ContainerIntro>

@@ -22,9 +22,9 @@ export function PageIntro() {
             과제 중심으로 질문을 구성해 두는 것이 좋습니다.
           </TextIntro> */}
           <Link href="/">
-            <Styled.LinkBtn backgroundColor={WHITE} color="#444" content="👀">
+            <Styled.AnchorBtn backgroundColor={WHITE} color="#444" content="👀">
               자세히보기
-            </Styled.LinkBtn>
+            </Styled.AnchorBtn>
           </Link>
         </Styled.ContainerText>
         <Styled.ImgIntro src="https://d1unjqcospf8gs.cloudfront.net/assets/home/main/3x/image-top-68ba12f0da7b5af9a574ed92ca8b3a9c0068db176b566dd374ee50359693358b.png" />

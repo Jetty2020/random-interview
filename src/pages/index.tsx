@@ -1,11 +1,21 @@
 import type { NextPage } from 'next';
 import PageTitle from '@components/common/PageTitle';
+import {
+  PageIntro,
+  ListPage,
+  Example,
+  InterviewPage,
+} from '@components/landing';
 
 const Home: NextPage = () => {
   return (
-    <div>
+    <>
       <PageTitle title="홈" />
-    </div>
+      <PageIntro />
+      <ListPage />
+      <InterviewPage />
+      {/* <Example /> */}
+    </>
   );
 };
 

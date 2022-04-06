@@ -18,23 +18,27 @@ const ListQuestion = ({ selection }: ListQuestionProps) => {
   return (
     <Container>
       <TitleList>질문</TitleList>
-      <ul>
+      <List>
         {QUESTIONS.filter(({ category }) => categories.includes(category)).map(
           ({ question, answer }) => (
             <Question key={question} question={question} answer={answer} />
           ),
         )}
-      </ul>
+      </List>
     </Container>
   );
 };
 
 const Container = styled.div`
-  padding: ${pxToRem(10)} ${pxToRem(20)};
+  padding: ${pxToRem(10)} 0;
 
   & li:not(:last-of-type) {
     margin-bottom: ${pxToRem(30)};
   }
+`;
+
+const List = styled.ul`
+  padding: 0 ${pxToRem(20)};
 `;
 
 export default React.memo(ListQuestion);

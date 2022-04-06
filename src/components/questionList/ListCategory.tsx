@@ -32,6 +32,7 @@ const ListCategory = ({ selection, categoryClick }: ListCategoryProps) => {
 const Container = styled.div`
   max-width: ${pxToRem(220)};
   padding: ${pxToRem(10)};
+  margin-right: ${pxToRem(50)};
 `;
 
 export default React.memo(ListCategory);

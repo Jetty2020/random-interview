@@ -37,7 +37,6 @@ interface ButtonProps {
 }
 
 const Item = styled.li`
-  max-width: ${pxToRem(250)};
   height: ${pxToRem(60)};
   margin: 0 auto;
 `;
@@ -45,9 +44,11 @@ const Item = styled.li`
 const Button = styled.button<ButtonProps>`
   width: 100%;
   height: 100%;
+  padding-left: ${pxToRem(20)};
   background-color: ${({ isSelected }) => (isSelected ? PRIMARY_400 : WHITE)};
   font-weight: ${({ isSelected }) => (isSelected ? 700 : 400)};
   font-size: ${pxToRem(24)};
+  text-align: left;
   color: ${({ isSelected }) => (isSelected ? WHITE : BLACK)};
   opacity: ${({ isSelected, isActive }) => {
     if (isActive && !isSelected) {

@@ -1,5 +1,6 @@
 import type { NextPage } from 'next';
 import { useCallback, useState } from 'react';
+import ContainerPage from '@components/common/ContainerPage';
 import PageTitle from '@components/common/PageTitle';
 import ListCategory from '@components/questionList/ListCategory';
 import { CATEGORIES } from '@constants/categories';
@@ -21,13 +22,13 @@ const QuestionListPage: NextPage = () => {
     }, []);
 
   return (
-    <>
+    <ContainerPage>
       <PageTitle title="면접 질문 목록" />
       <WrapperQuestion>
         <ListCategory selection={selection} categoryClick={categoryClick} />
         <ListQuestion selection={selection} />
       </WrapperQuestion>
-    </>
+    </ContainerPage>
   );
 };
 

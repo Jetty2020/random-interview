@@ -1,5 +1,6 @@
-import { GRAY_500 } from '@constants/colors';
 import styled from '@emotion/styled';
+import React from 'react';
+import { GRAY_500 } from '@constants/colors';
 import { pxToRem } from '@utils/pxToRem';
 
 const TitleQuestionListPage = () => {
@@ -26,4 +27,4 @@ const Desc = styled.p`
   color: ${GRAY_500};
 `;
 
-export default TitleQuestionListPage;
+export default React.memo(TitleQuestionListPage);

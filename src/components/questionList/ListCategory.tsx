@@ -3,6 +3,7 @@ import React from 'react';
 import { CATEGORIES } from '@constants/categories';
 import { pxToRem } from '@utils/pxToRem';
 import Category from './Category';
+import TitleList from './TitleList';
 
 interface ListCategoryProps {
   selection: boolean[];
@@ -12,6 +13,7 @@ interface ListCategoryProps {
 const ListCategory = ({ selection, categoryClick }: ListCategoryProps) => {
   return (
     <Container>
+      <TitleList>카테고리</TitleList>
       <ul>
         {CATEGORIES.map((category, index) => (
           <Category
@@ -28,7 +30,7 @@ const ListCategory = ({ selection, categoryClick }: ListCategoryProps) => {
 };
 
 const Container = styled.div`
-  max-width: ${pxToRem(250)};
+  max-width: ${pxToRem(220)};
   padding: ${pxToRem(10)};
 `;
 

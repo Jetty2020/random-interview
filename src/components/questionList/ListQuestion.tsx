@@ -4,6 +4,7 @@ import { CATEGORIES } from '@constants/categories';
 import { QUESTIONS } from '@constants/questions';
 import { pxToRem } from '@utils/pxToRem';
 import Question from './Question';
+import TitleList from './TitleList';
 
 interface ListQuestionProps {
   selection: boolean[];
@@ -16,6 +17,7 @@ const ListQuestion = ({ selection }: ListQuestionProps) => {
 
   return (
     <Container>
+      <TitleList>질문</TitleList>
       <ul>
         {QUESTIONS.filter(({ category }) => categories.includes(category)).map(
           ({ question, answer }) => (

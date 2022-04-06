@@ -1,8 +1,8 @@
 import { NextPage } from 'next';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Media from '@components/Media';
-import Link from 'next/link';
 
 interface IMediaProps {
   recordMethod: string | undefined;
@@ -28,7 +28,6 @@ const RandomPlay: NextPage = () => {
 
   useEffect(() => {
     console.log('RandomPlay 페이지 마운트');
-
     return () => {
       console.log('RandomPlay 페이지 언마운트');
     };

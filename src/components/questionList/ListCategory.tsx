@@ -3,6 +3,7 @@ import React from 'react';
 import { CATEGORIES } from '@constants/categories';
 import { pxToRem } from '@utils/pxToRem';
 import Category from './Category';
+import TitleList from './TitleList';
 
 interface ListCategoryProps {
   selection: boolean[];
@@ -11,23 +12,27 @@ interface ListCategoryProps {
 
 const ListCategory = ({ selection, categoryClick }: ListCategoryProps) => {
   return (
-    <CategoryContainer>
-      {CATEGORIES.map((category, index) => (
-        <Category
-          key={category}
-          category={category}
-          isSelected={selection[index]}
-          isActive={selection.some((isSelected) => isSelected)}
-          handleClick={categoryClick(index)}
-        />
-      ))}
-    </CategoryContainer>
+    <Container>
+      <TitleList>카테고리</TitleList>
+      <ul>
+        {CATEGORIES.map((category, index) => (
+          <Category
+            key={category}
+            category={category}
+            isSelected={selection[index]}
+            isActive={selection.some((isSelected) => isSelected)}
+            handleClick={categoryClick(index)}
+          />
+        ))}
+      </ul>
+    </Container>
   );
 };
 
-const CategoryContainer = styled.ul`
-  max-width: ${pxToRem(300)};
+const Container = styled.div`
+  max-width: ${pxToRem(220)};
   padding: ${pxToRem(10)};
+  margin-right: ${pxToRem(50)};
 `;
 
 export default React.memo(ListCategory);

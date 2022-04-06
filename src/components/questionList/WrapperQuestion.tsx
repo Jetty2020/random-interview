@@ -5,10 +5,10 @@ interface WrapperProps {
 }
 
 const WrapperQuestion = ({ children }: WrapperProps) => {
-  return <WrapperFlex>{children}</WrapperFlex>;
+  return <Flex>{children}</Flex>;
 };
 
-const WrapperFlex = styled.section`
+const Flex = styled.div`
   display: flex;
 
   & > * {

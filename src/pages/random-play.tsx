@@ -35,9 +35,7 @@ const RandomPlay: NextPage = () => {
 
   return (
     <>
-      {(recordMethod === 'audio' ||
-        recordMethod === 'video' ||
-        recordMethod === 'full') && (
+      {recordMethod !== 'none' && (
         <Media
           isTest={false}
           isRecording={true}

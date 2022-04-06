@@ -16,16 +16,18 @@ const ListQuestion = ({ selection }: ListQuestionProps) => {
 
   return (
     <Container>
-      {QUESTIONS.filter(({ category }) => categories.includes(category)).map(
-        ({ question, answer }) => (
-          <Question key={question} question={question} answer={answer} />
-        ),
-      )}
+      <ul>
+        {QUESTIONS.filter(({ category }) => categories.includes(category)).map(
+          ({ question, answer }) => (
+            <Question key={question} question={question} answer={answer} />
+          ),
+        )}
+      </ul>
     </Container>
   );
 };
 
-const Container = styled.ul`
+const Container = styled.div`
   padding: ${pxToRem(10)} ${pxToRem(20)};
 
   & li:not(:last-of-type) {

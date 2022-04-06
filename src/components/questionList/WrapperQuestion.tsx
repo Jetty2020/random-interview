@@ -8,7 +8,7 @@ const WrapperQuestion = ({ children }: WrapperProps) => {
   return <Flex>{children}</Flex>;
 };
 
-const Flex = styled.section`
+const Flex = styled.div`
   display: flex;
 
   & > * {

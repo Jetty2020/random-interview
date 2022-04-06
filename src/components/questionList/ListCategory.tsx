@@ -12,21 +12,23 @@ interface ListCategoryProps {
 const ListCategory = ({ selection, categoryClick }: ListCategoryProps) => {
   return (
     <Container>
-      {CATEGORIES.map((category, index) => (
-        <Category
-          key={category}
-          category={category}
-          isSelected={selection[index]}
-          isActive={selection.some((isSelected) => isSelected)}
-          handleClick={categoryClick(index)}
-        />
-      ))}
+      <ul>
+        {CATEGORIES.map((category, index) => (
+          <Category
+            key={category}
+            category={category}
+            isSelected={selection[index]}
+            isActive={selection.some((isSelected) => isSelected)}
+            handleClick={categoryClick(index)}
+          />
+        ))}
+      </ul>
     </Container>
   );
 };
 
-const Container = styled.ul`
-  max-width: ${pxToRem(300)};
+const Container = styled.div`
+  max-width: ${pxToRem(250)};
   padding: ${pxToRem(10)};
 `;
 

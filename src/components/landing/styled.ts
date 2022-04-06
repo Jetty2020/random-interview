@@ -28,7 +28,7 @@ export const SectionPage = styled.section<SetctionProps>`
 export const ContainerIntro = styled.div<ContainerIntroProps>`
   flex-basis: 40%;
   position: relative;
-  min-width: 1024px;
+  min-width: 1140px;
   height: 760px;
   margin: 0 auto;
   display: flex;

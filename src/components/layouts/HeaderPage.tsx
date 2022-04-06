@@ -37,7 +37,7 @@ const HeaderBar = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  max-width: 1024px;
+  max-width: 1140px;
   margin: 0 auto;
 `;
 

@@ -30,11 +30,13 @@ export const StartInterview = ({
   const { question } = router.query;
   console.log('question', question);
   const [questionContent, setQuestionContent] = useState([0, 0]);
+
   const questionQueryArr =
     question
       ?.toString()
       .split('_')
       .map((ele) => +ele) || [];
+
   const firstStartCategory = questionQueryArr.findIndex((e) => e !== 0);
   console.log(`firstStartCategory ${firstStartCategory}`);
   console.log('questionQueryArr', questionQueryArr);
@@ -57,6 +59,7 @@ export const StartInterview = ({
   );
 
   useEffect(() => {
+    setQuestionContent([firstStartCategory, 0]);
     setQuestionArr(
       questionQueryArr.map((ele, idx) =>
         selectIndex(quizCountOfCategory[idx], ele),

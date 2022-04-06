@@ -7,7 +7,7 @@ export function PageIntro() {
     <Styled.SectionPage backgroundColor={PRIMARY_100}>
       <Styled.ContainerIntro>
         <Styled.ContainerText>
-          <Styled.TextLogo>소개합니다</Styled.TextLogo>
+          <Styled.HeaderLogo>소개합니다</Styled.HeaderLogo>
           <Styled.TextIntro>
             프론트엔드 기술에 따른 질문 리스트 모아둔 페이지입니다,
             <br />

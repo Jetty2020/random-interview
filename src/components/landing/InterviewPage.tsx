@@ -7,7 +7,7 @@ export function InterviewPage() {
     <Styled.SectionPage backgroundColor={PRIMARY_100}>
       <Styled.ContainerIntro>
         <Styled.ContainerText>
-          <Styled.TextLogo>면접 플레잉</Styled.TextLogo>
+          <Styled.HeaderLogo>면접 플레잉</Styled.HeaderLogo>
           {/* <TextIntro>
             면접을 보는 모습을 녹화하면서, 녹화된 영상을 보고 면접 태도를
             바로잡고 제시된 면접 질문을 통해 실전 연습할 수 있어요.

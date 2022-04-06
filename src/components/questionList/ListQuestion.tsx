@@ -1,16 +1,17 @@
 import styled from '@emotion/styled';
 import React from 'react';
 import { CATEGORIES } from '@constants/categories';
-import { QUESTIONS } from '@constants/questions';
+import { QuestionData } from '@constants/questions';
 import { pxToRem } from '@utils/pxToRem';
 import Question from './Question';
 import TitleList from './TitleList';
 
 interface ListQuestionProps {
   selection: boolean[];
+  questionMap: Map<string, QuestionData[]>;
 }
 
-const ListQuestion = ({ selection }: ListQuestionProps) => {
+const ListQuestion = ({ selection, questionMap }: ListQuestionProps) => {
   const categories = selection.every((isSelected) => !isSelected)
     ? CATEGORIES
     : CATEGORIES.filter((_, i) => selection[i]);
@@ -19,11 +20,12 @@ const ListQuestion = ({ selection }: ListQuestionProps) => {
     <Container>
       <TitleList>질문</TitleList>
       <List>
-        {QUESTIONS.filter(({ category }) => categories.includes(category)).map(
-          ({ question, answer }) => (
+        {categories.map((category) => {
+          const questions = questionMap.get(category);
+          return questions?.map(({ question, answer }) => (
             <Question key={question} question={question} answer={answer} />
-          ),
-        )}
+          ));
+        })}
       </List>
     </Container>
   );

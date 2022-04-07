@@ -16,9 +16,11 @@ const QuestionListPage: NextPage = () => {
   const [questionMap, setQuestionMap] = useState<Map<string, QuestionData[]>>(
     new Map(),
   );
+  const [page, setPage] = useState<number>(1);
 
   const categoryClick = (index: number) =>
     useCallback(() => {
+      setPage(1);
       setSelection((state) => {
         const selection = [...state];
         selection[index] = !selection[index];
@@ -39,7 +41,12 @@ const QuestionListPage: NextPage = () => {
       <TitleQuestionListPage />
       <WrapperQuestion>
         <ListCategory selection={selection} categoryClick={categoryClick} />
-        <ListQuestion selection={selection} questionMap={questionMap} />
+        <ListQuestion
+          page={page}
+          setPage={setPage}
+          selection={selection}
+          questionMap={questionMap}
+        />
       </WrapperQuestion>
     </ContainerPage>
   );

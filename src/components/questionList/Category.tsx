@@ -46,8 +46,8 @@ const Button = styled.button<ButtonProps>`
   width: 100%;
   height: 100%;
   padding-left: ${pxToRem(20)};
-  background-color: ${({ isSelected }) => (isSelected ? PRIMARY_400 : WHITE)};
   border-top: 6px solid ${WHITE};
+  background-color: ${({ isSelected }) => (isSelected ? PRIMARY_400 : WHITE)};
   font-weight: ${({ isSelected }) => (isSelected ? 700 : 400)};
   font-size: ${pxToRem(24)};
   text-align: left;

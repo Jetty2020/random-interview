@@ -1,7 +1,6 @@
 import type { NextPage } from 'next';
 import { useCallback, useEffect, useState } from 'react';
-import { CATEGORIES } from '@constants/categories';
-import { QuestionData, QUESTIONS } from '@constants/questions';
+import { QuestionData, CATEGORIES, QUESTIONS } from '@constants/.';
 import ContainerPage from '@components/common/ContainerPage';
 import PageTitle from '@components/common/PageTitle';
 import {

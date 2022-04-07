@@ -1,8 +1,7 @@
 import styled from '@emotion/styled';
 import React, { SetStateAction } from 'react';
-import { CATEGORIES } from '@constants/categories';
-import { QuestionData } from '@constants/questions';
 import { pxToRem } from '@utils/pxToRem';
+import { CATEGORIES, QuestionData } from '@constants/.';
 import Question from './Question';
 import TitleList from './TitleList';
 import Pagination from './Pagination';

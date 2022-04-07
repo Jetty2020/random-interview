@@ -4,7 +4,6 @@ import { NextPageContext } from 'next';
 import { pxToRem } from '@utils/pxToRem';
 import { PRIMARY_700, WHITE } from '@constants/colors';
 import ErrorIcon from '@assets/icon/error.svg';
-
 import Error404 from './404';
 
 function Error(statusCode: number) {
@@ -72,10 +71,10 @@ const Container = styled.section`
 `;
 
 const Title = styled.h3`
+  margin: ${pxToRem(28)} 0 ${pxToRem(12)};
   font-size: ${pxToRem(50)};
   color: ${PRIMARY_700};
   font-weight: 700;
-  margin: ${pxToRem(28)} 0 ${pxToRem(12)};
 `;
 
 const Desc = styled.p`
@@ -86,13 +85,13 @@ const Desc = styled.p`
 `;
 
 const BackAnchor = styled.a`
-  background-color: ${WHITE};
-  color: ${PRIMARY_700};
-  padding: ${pxToRem(17)} ${pxToRem(25)};
-  font-weight: 600;
-  font-size: ${pxToRem(18)};
   border: ${pxToRem(3)} solid ${PRIMARY_700};
   border-radius: ${pxToRem(10)};
+  padding: ${pxToRem(17)} ${pxToRem(25)};
+  background-color: ${WHITE};
+  color: ${PRIMARY_700};
+  font-weight: 600;
+  font-size: ${pxToRem(18)};
 
   &:hover {
     background-color: ${PRIMARY_700};

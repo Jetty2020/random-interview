@@ -10,7 +10,10 @@ interface ListCategoryProps {
   categoryClick: (index: number) => () => void;
 }
 
-const ListCategory = ({ selection, categoryClick }: ListCategoryProps) => {
+export const ListCategory = React.memo(function ListCategory({
+  selection,
+  categoryClick,
+}: ListCategoryProps) {
   return (
     <Container>
       <TitleList>카테고리</TitleList>
@@ -27,12 +30,10 @@ const ListCategory = ({ selection, categoryClick }: ListCategoryProps) => {
       </ul>
     </Container>
   );
-};
+});
 
 const Container = styled.div`
   max-width: ${pxToRem(220)};
   padding: ${pxToRem(10)};
   margin-right: ${pxToRem(50)};
 `;
-
-export default React.memo(ListCategory);

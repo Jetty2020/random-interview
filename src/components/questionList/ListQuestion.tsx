@@ -14,12 +14,12 @@ interface ListQuestionProps {
   questionMap: Map<string, QuestionData[]>;
 }
 
-const ListQuestion = ({
+export const ListQuestion = React.memo(function ListQuestion({
   page,
   setPage,
   selection,
   questionMap,
-}: ListQuestionProps) => {
+}: ListQuestionProps) {
   const categories = selection.every((isSelected) => !isSelected)
     ? CATEGORIES
     : CATEGORIES.filter((_, i) => selection[i]);
@@ -45,7 +45,7 @@ const ListQuestion = ({
       />
     </Container>
   );
-};
+});
 
 const Container = styled.div`
   padding: ${pxToRem(10)} 0;

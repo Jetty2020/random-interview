@@ -1,13 +1,15 @@
 import type { NextPage } from 'next';
 import { useCallback, useEffect, useState } from 'react';
 import { CATEGORIES } from '@constants/categories';
+import { QuestionData, QUESTIONS } from '@constants/questions';
 import ContainerPage from '@components/common/ContainerPage';
 import PageTitle from '@components/common/PageTitle';
-import TitleQuestionListPage from '@components/questionList/Title';
-import WrapperQuestion from '@components/questionList/WrapperQuestion';
-import ListCategory from '@components/questionList/ListCategory';
-import ListQuestion from '@components/questionList/ListQuestion';
-import { QuestionData, QUESTIONS } from '@constants/questions';
+import {
+  WrapperQuestion,
+  TitlePage,
+  ListCategory,
+  ListQuestion,
+} from '@components/questionList';
 
 const QuestionListPage: NextPage = () => {
   const [selection, setSelection] = useState<boolean[]>(
@@ -38,7 +40,7 @@ const QuestionListPage: NextPage = () => {
   return (
     <ContainerPage>
       <PageTitle title="면접 질문 목록" />
-      <TitleQuestionListPage />
+      <TitlePage />
       <WrapperQuestion>
         <ListCategory selection={selection} categoryClick={categoryClick} />
         <ListQuestion

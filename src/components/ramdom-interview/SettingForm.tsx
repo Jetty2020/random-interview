@@ -1,8 +1,8 @@
 import { useForm } from 'react-hook-form';
 import styled from '@emotion/styled';
-import { GRAY_300, PRIMARY_900, RED_300, WHITE } from '@constants/colors';
 import { useState } from 'react';
 import router from 'next/router';
+import { GRAY_300, PRIMARY_900, RED_300, WHITE } from '@constants/colors';
 import { QUESTIONS } from '@constants/questions';
 import { CATEGORIES } from '@constants/categories';
 
@@ -59,6 +59,7 @@ export const SettingForm = () => {
       setErrMsg('');
     }
   };
+
   const submitCategory = () => {
     const { html, css, js, web, react, quizCount } = getValues();
     const checkedOptionArr = [html, css, js, web, react];
@@ -71,6 +72,7 @@ export const SettingForm = () => {
             .length
         : 0,
     );
+
     const maxQuizCount = quizCountOfCategory.reduce(reducer);
     if (!(html || css || js || web || react)) {
       setErrMsg('카테고리를 선택해주세요');
@@ -103,6 +105,7 @@ export const SettingForm = () => {
         }
         return e;
       });
+
       // 추가
       const arrSum = distributedQuizArr.reduce(reducer);
 

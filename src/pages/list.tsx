@@ -1,18 +1,27 @@
 import type { NextPage } from 'next';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { QuestionData, CATEGORIES, QUESTIONS } from '@constants/.';
+import ContainerPage from '@components/common/ContainerPage';
 import PageTitle from '@components/common/PageTitle';
-import ListCategory from '@components/questionList/ListCategory';
-import { CATEGORIES } from '@constants/categories';
-import ListQuestion from '@components/questionList/ListQuestion';
-import WrapperQuestion from '@components/questionList/WrapperQuestion';
+import {
+  WrapperQuestion,
+  TitlePage,
+  ListCategory,
+  ListQuestion,
+} from '@components/questionList';
 
 const QuestionListPage: NextPage = () => {
   const [selection, setSelection] = useState<boolean[]>(
     Array(CATEGORIES.length).fill(false),
   );
+  const [questionMap, setQuestionMap] = useState<Map<string, QuestionData[]>>(
+    new Map(),
+  );
+  const [page, setPage] = useState<number>(1);
 
   const categoryClick = (index: number) =>
     useCallback(() => {
+      setPage(1);
       setSelection((state) => {
         const selection = [...state];
         selection[index] = !selection[index];
@@ -20,14 +29,27 @@ const QuestionListPage: NextPage = () => {
       });
     }, []);
 
+  useEffect(() => {
+    const map = new Map();
+    CATEGORIES.forEach((category) => map.set(category, []));
+    QUESTIONS.forEach((question) => map.get(question.category).push(question));
+    setQuestionMap(map);
+  }, []);
+
   return (
-    <>
+    <ContainerPage>
       <PageTitle title="면접 질문 목록" />
+      <TitlePage />
       <WrapperQuestion>
         <ListCategory selection={selection} categoryClick={categoryClick} />
-        <ListQuestion selection={selection} />
+        <ListQuestion
+          page={page}
+          setPage={setPage}
+          selection={selection}
+          questionMap={questionMap}
+        />
       </WrapperQuestion>
-    </>
+    </ContainerPage>
   );
 };
 

@@ -42,14 +42,16 @@ const Item = styled.li`
 `;
 
 const Button = styled.button<ButtonProps>`
+  position: relative;
   width: 100%;
   height: 100%;
   padding-left: ${pxToRem(20)};
+  border-top: 6px solid ${WHITE};
   background-color: ${({ isSelected }) => (isSelected ? PRIMARY_400 : WHITE)};
   font-weight: ${({ isSelected }) => (isSelected ? 700 : 400)};
   font-size: ${pxToRem(24)};
   text-align: left;
-  color: ${({ isSelected }) => (isSelected ? WHITE : BLACK)};
+  color: ${BLACK};
   opacity: ${({ isSelected, isActive }) => {
     if (isActive && !isSelected) {
       return 0.3;
@@ -57,6 +59,17 @@ const Button = styled.button<ButtonProps>`
     return 1;
   }};
   transition: opacity 0.2s;
+
+  &::after {
+    content: '';
+    display: block;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 0;
+    border-left: 12px solid transparent;
+    border-bottom: 12px solid ${WHITE};
+  }
 
   &:hover {
     background-color: ${({ isSelected }) =>

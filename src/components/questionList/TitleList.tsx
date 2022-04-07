@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import React from 'react';
 import { GRAY_100, PRIMARY_800, WHITE } from '@constants/colors';
 import { pxToRem } from '@utils/pxToRem';
 
@@ -23,4 +24,4 @@ const Title = styled.p`
   color: ${PRIMARY_800};
 `;
 
-export default TitleList;
+export default React.memo(TitleList);

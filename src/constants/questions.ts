@@ -1,3 +1,9 @@
+export interface QuestionData {
+  question: string;
+  answer: string;
+  category: string;
+}
+
 export const QUESTIONS = [
   {
     question: '질문1',

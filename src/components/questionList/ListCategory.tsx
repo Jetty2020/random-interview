@@ -16,18 +16,20 @@ export const ListCategory = React.memo(function ListCategory({
 }: ListCategoryProps) {
   return (
     <Container>
-      <TitleList>카테고리</TitleList>
-      <ul>
-        {CATEGORIES.map((category, index) => (
-          <Category
-            key={category}
-            category={category}
-            isSelected={selection[index]}
-            isActive={selection.some((isSelected) => isSelected)}
-            handleClick={categoryClick(index)}
-          />
-        ))}
-      </ul>
+      <WrapperSticky>
+        <TitleList>카테고리</TitleList>
+        <ul>
+          {CATEGORIES.map((category, index) => (
+            <Category
+              key={category}
+              category={category}
+              isSelected={selection[index]}
+              isActive={selection.some((isSelected) => isSelected)}
+              handleClick={categoryClick(index)}
+            />
+          ))}
+        </ul>
+      </WrapperSticky>
     </Container>
   );
 });
@@ -36,4 +38,9 @@ const Container = styled.div`
   max-width: ${pxToRem(220)};
   padding: ${pxToRem(10)};
   margin-right: ${pxToRem(50)};
+`;
+
+const WrapperSticky = styled.div`
+  position: sticky;
+  top: ${pxToRem(80)};
 `;

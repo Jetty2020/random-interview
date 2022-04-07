@@ -35,7 +35,7 @@ export const ListQuestion = React.memo(function ListQuestion({
 
   return (
     <Container>
-      <TitleList>질문</TitleList>
+      <TitleList sticky>질문</TitleList>
       <List>{questions.slice((page - 1) * 10, page * 10)}</List>
       <Pagination
         page={page}

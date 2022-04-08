@@ -1,16 +1,57 @@
 import styled from '@emotion/styled';
-import React, { useState } from 'react';
+import React, { SetStateAction, useCallback, useState } from 'react';
 import { pxToRem } from '@utils/pxToRem';
 import IconSearch from '@assets/icon/search.svg';
-import { GRAY_300, PRIMARY_800 } from '@constants/colors';
+import { GRAY_300, PRIMARY_800, QuestionData } from '@constants/.';
+import { debounce } from '@utils/debounce';
 
-export const SearchBar = React.memo(function SearchBar() {
+interface SearchBarProps {
+  setQuestions: React.Dispatch<SetStateAction<QuestionData[]>>;
+  updateQuestions: () => void;
+}
+
+export const SearchBar = React.memo(function SearchBar({
+  setQuestions,
+  updateQuestions,
+}: SearchBarProps) {
   const [value, setValue] = useState<string>('');
 
-  const handleChange = ({
-    target: { value },
-  }: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(value);
+  const handleChange = useCallback(
+    debounce<React.ChangeEvent<HTMLInputElement>>(
+      ({ target: { value } }) => {
+        updateQuestions();
+        if (value) {
+          searchQuestions(value);
+        }
+      },
+      300,
+      ({ target: { value } }) => {
+        setValue(value);
+      },
+    ),
+    [updateQuestions],
+  );
+
+  const searchQuestions = (inputValue: string) => {
+    const keywords = [...new Set<string>(inputValue.trim().split(/\s/))];
+    const regex = new RegExp(`(${keywords.join('|')})`, 'gi');
+    setQuestions((questions) =>
+      questions
+        .map((question) => {
+          const result = question.question.match(regex);
+          return {
+            ...question,
+            matchKeyword: [...new Set(result)].length,
+            matchCount: result?.length || 0,
+          };
+        })
+        .filter(({ matchKeyword }) => matchKeyword)
+        .sort((a, b) =>
+          a.matchKeyword === b.matchKeyword
+            ? b.matchCount - a.matchCount
+            : b.matchKeyword - a.matchKeyword,
+        ),
+    );
   };
 
   return (

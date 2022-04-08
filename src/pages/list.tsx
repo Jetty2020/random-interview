@@ -30,15 +30,15 @@ const QuestionListPage: NextPage = () => {
 
   const updateQuestions = useCallback(() => {
     setQuestions(
-      (selection.every((isSelected) => !isSelected)
-        ? CATEGORIES
-        : CATEGORIES.filter((_, i) => selection[i])
+      (selection.some((isSelected) => isSelected)
+        ? CATEGORIES.filter((_, i) => selection[i])
+        : CATEGORIES
       )
         .map((category) => QUESTION_MAP.get(category) || [])
         .flat()
         .sort((a, b) => a.question.localeCompare(b.question)),
     );
-  }, []);
+  }, [selection]);
 
   useEffect(() => {
     updateQuestions();
@@ -48,7 +48,10 @@ const QuestionListPage: NextPage = () => {
     <ContainerPage>
       <PageTitle title="면접 질문 목록" />
       <TitlePage />
-      <SearchBar />
+      <SearchBar
+        setQuestions={setQuestions}
+        updateQuestions={updateQuestions}
+      />
       <WrapperQuestion>
         <ListCategory selection={selection} categoryClick={categoryClick} />
         <ListQuestion page={page} setPage={setPage} questions={questions} />

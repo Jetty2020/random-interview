@@ -66,7 +66,7 @@ export const StartInterview = () => {
         progressArr[questionContent[0]] &&
       questionQueryArr.length - 1 === questionContent[0]
     ) {
-      const newArr = questionIndexArr.map((ele) => ele.join('%')).join('*');
+      const newArr = questionIndexArr.map((ele) => ele.join('*')).join('-');
       router.push(`/random-interview?question-list=${newArr}`);
     } else if (
       questionQueryArr[questionContent[0]] === progressArr[questionContent[0]]

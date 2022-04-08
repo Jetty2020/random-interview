@@ -19,13 +19,13 @@ const selectIndex = (totalIndex: number, selectingNumber: number) => {
 };
 
 interface StartInterviewProps {
-  questionArr: number[][];
-  setQuestionArr: (value: number[][]) => void;
+  questionIndexArr: number[][];
+  setQuestionIndexArr: (value: number[][]) => void;
 }
 
 export const StartInterview = ({
-  questionArr,
-  setQuestionArr,
+  questionIndexArr,
+  setQuestionIndexArr,
 }: StartInterviewProps) => {
   const { question } = router.query;
   console.log('question', question);
@@ -60,7 +60,7 @@ export const StartInterview = ({
 
   useEffect(() => {
     setQuestionContent([firstStartCategory, 0]);
-    setQuestionArr(
+    setQuestionIndexArr(
       questionQueryArr.map((ele, idx) =>
         selectIndex(quizCountOfCategory[idx], ele),
       ),
@@ -119,7 +119,8 @@ export const StartInterview = ({
           {
             QUESTIONS.filter(
               (ele) => ele.category === CATEGORIES[questionContent[0]],
-            )[questionArr[questionContent[0]][questionContent[1]]]?.question
+            )[questionIndexArr[questionContent[0]][questionContent[1]]]
+              ?.question
           }
         </ContentQuestion>
         <Video />

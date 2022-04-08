@@ -10,19 +10,19 @@ import { QuestionList } from '@components/ramdom-interview/QuestionList';
 const RandomInterview: NextPage = () => {
   const router = useRouter();
   const { question, 'question-list': questionList } = router.query;
-  const [questionArr, setQuestionArr] = useState<number[][]>([[]]);
+  const [questionIndexArr, setQuestionIndexArr] = useState<number[][]>([[]]);
 
   const page = () => {
     if (question) {
       return (
         <StartInterview
-          questionArr={questionArr}
-          setQuestionArr={setQuestionArr}
+          questionIndexArr={questionIndexArr}
+          setQuestionIndexArr={setQuestionIndexArr}
         />
       );
     }
     if (questionList === '') {
-      return <QuestionList questionArr={questionArr} />;
+      return <QuestionList questionIndexArr={questionIndexArr} />;
     }
     return <SettingForm />;
   };

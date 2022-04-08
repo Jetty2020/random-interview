@@ -3,11 +3,9 @@ import { QUESTIONS } from '@constants/questions';
 import { CATEGORIES } from '@constants/categories';
 
 interface StartInterviewProps {
-  questionArr: number[][];
+  questionIndexArr: number[][];
 }
 
-export const QuestionList = ({ questionArr }: StartInterviewProps) => {
-  //   const [questionContent, setQuestionContent] = useState([0, 0]);
-  console.log(`questionArr ${questionArr}`);
+export const QuestionList = ({ questionIndexArr }: StartInterviewProps) => {
   return <>ddu</>;
 };

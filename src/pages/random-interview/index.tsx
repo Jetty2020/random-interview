@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { useState } from 'react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import PageTitle from '@components/common/PageTitle';
@@ -10,19 +9,13 @@ import { QuestionList } from '@components/ramdom-interview/QuestionList';
 const RandomInterview: NextPage = () => {
   const router = useRouter();
   const { question, 'question-list': questionList } = router.query;
-  const [questionIndexArr, setQuestionIndexArr] = useState<number[][]>([[]]);
 
   const page = () => {
     if (question) {
-      return (
-        <StartInterview
-          questionIndexArr={questionIndexArr}
-          setQuestionIndexArr={setQuestionIndexArr}
-        />
-      );
+      return <StartInterview />;
     }
-    if (questionList === '') {
-      return <QuestionList questionIndexArr={questionIndexArr} />;
+    if (questionList) {
+      return <QuestionList />;
     }
     return <SettingForm />;
   };

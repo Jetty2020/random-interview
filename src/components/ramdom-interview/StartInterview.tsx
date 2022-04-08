@@ -18,16 +18,9 @@ const selectIndex = (totalIndex: number, selectingNumber: number) => {
   return randomIndexArray;
 };
 
-interface StartInterviewProps {
-  questionIndexArr: number[][];
-  setQuestionIndexArr: (value: number[][]) => void;
-}
-
-export const StartInterview = ({
-  questionIndexArr,
-  setQuestionIndexArr,
-}: StartInterviewProps) => {
+export const StartInterview = () => {
   const { question } = router.query;
+  const [questionIndexArr, setQuestionIndexArr] = useState<number[][]>([[]]);
   console.log('question', question);
   const [questionContent, setQuestionContent] = useState([0, 0]);
 
@@ -73,7 +66,8 @@ export const StartInterview = ({
         progressArr[questionContent[0]] &&
       questionQueryArr.length - 1 === questionContent[0]
     ) {
-      router.push('/random-interview?question-list');
+      const newArr = questionIndexArr.map((ele) => ele.join('%')).join('*');
+      router.push(`/random-interview?question-list=${newArr}`);
     } else if (
       questionQueryArr[questionContent[0]] === progressArr[questionContent[0]]
     ) {

@@ -91,6 +91,7 @@ const Input = styled.input`
   &:focus {
     outline: none;
     border-bottom-color: ${PRIMARY_800};
+    caret-color: ${PRIMARY_800};
   }
 
   &:focus + svg {

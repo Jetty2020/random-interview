@@ -6,6 +6,7 @@ import PageTitle from '@components/common/PageTitle';
 import {
   WrapperQuestion,
   TitlePage,
+  SearchBar,
   ListCategory,
   ListQuestion,
 } from '@components/questionList';
@@ -40,6 +41,7 @@ const QuestionListPage: NextPage = () => {
     <ContainerPage>
       <PageTitle title="면접 질문 목록" />
       <TitlePage />
+      <SearchBar />
       <WrapperQuestion>
         <ListCategory selection={selection} categoryClick={categoryClick} />
         <ListQuestion

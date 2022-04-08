@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import { useCallback, useEffect, useState } from 'react';
-import { QuestionData, CATEGORIES, QUESTIONS } from '@constants/.';
+import { QuestionData, CATEGORIES, QUESTION_MAP } from '@constants/.';
 import ContainerPage from '@components/common/ContainerPage';
 import PageTitle from '@components/common/PageTitle';
 import {
@@ -15,9 +15,7 @@ const QuestionListPage: NextPage = () => {
   const [selection, setSelection] = useState<boolean[]>(
     Array(CATEGORIES.length).fill(false),
   );
-  const [questionMap, setQuestionMap] = useState<Map<string, QuestionData[]>>(
-    new Map(),
-  );
+  const [questions, setQuestions] = useState<QuestionData[]>([]);
   const [page, setPage] = useState<number>(1);
 
   const categoryClick = (index: number) =>
@@ -30,12 +28,21 @@ const QuestionListPage: NextPage = () => {
       });
     }, []);
 
-  useEffect(() => {
-    const map = new Map();
-    CATEGORIES.forEach((category) => map.set(category, []));
-    QUESTIONS.forEach((question) => map.get(question.category).push(question));
-    setQuestionMap(map);
+  const updateQuestions = useCallback(() => {
+    setQuestions(
+      (selection.every((isSelected) => !isSelected)
+        ? CATEGORIES
+        : CATEGORIES.filter((_, i) => selection[i])
+      )
+        .map((category) => QUESTION_MAP.get(category) || [])
+        .flat()
+        .sort((a, b) => a.question.localeCompare(b.question)),
+    );
   }, []);
+
+  useEffect(() => {
+    updateQuestions();
+  }, [selection]);
 
   return (
     <ContainerPage>
@@ -44,12 +51,7 @@ const QuestionListPage: NextPage = () => {
       <SearchBar />
       <WrapperQuestion>
         <ListCategory selection={selection} categoryClick={categoryClick} />
-        <ListQuestion
-          page={page}
-          setPage={setPage}
-          selection={selection}
-          questionMap={questionMap}
-        />
+        <ListQuestion page={page} setPage={setPage} questions={questions} />
       </WrapperQuestion>
     </ContainerPage>
   );

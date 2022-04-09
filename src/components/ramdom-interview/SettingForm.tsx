@@ -124,7 +124,10 @@ export const SettingForm = () => {
       }
 
       const query = distributedQuizArr.join('_');
-      router.push(`random-interview?question=${query}`);
+      router.push(
+        `random-interview?question=${query}`,
+        'random-interview/interviewing',
+      );
     }
   };
 

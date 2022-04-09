@@ -18,16 +18,9 @@ const selectIndex = (totalIndex: number, selectingNumber: number) => {
   return randomIndexArray;
 };
 
-interface StartInterviewProps {
-  questionArr: number[][];
-  setQuestionArr: (value: number[][]) => void;
-}
-
-export const StartInterview = ({
-  questionArr,
-  setQuestionArr,
-}: StartInterviewProps) => {
+export const StartInterview = () => {
   const { question } = router.query;
+  const [questionIndexArr, setQuestionIndexArr] = useState<number[][]>([[]]);
   console.log('question', question);
   const [questionContent, setQuestionContent] = useState([0, 0]);
 
@@ -60,7 +53,7 @@ export const StartInterview = ({
 
   useEffect(() => {
     setQuestionContent([firstStartCategory, 0]);
-    setQuestionArr(
+    setQuestionIndexArr(
       questionQueryArr.map((ele, idx) =>
         selectIndex(quizCountOfCategory[idx], ele),
       ),
@@ -73,7 +66,8 @@ export const StartInterview = ({
         progressArr[questionContent[0]] &&
       questionQueryArr.length - 1 === questionContent[0]
     ) {
-      router.push('/random-interview?question-list');
+      const newArr = questionIndexArr.map((ele) => ele.join('*')).join('-');
+      router.push(`/random-interview?question-list=${newArr}`);
     } else if (
       questionQueryArr[questionContent[0]] === progressArr[questionContent[0]]
     ) {
@@ -119,7 +113,8 @@ export const StartInterview = ({
           {
             QUESTIONS.filter(
               (ele) => ele.category === CATEGORIES[questionContent[0]],
-            )[questionArr[questionContent[0]][questionContent[1]]]?.question
+            )[questionIndexArr[questionContent[0]][questionContent[1]]]
+              ?.question
           }
         </ContentQuestion>
         <Video />

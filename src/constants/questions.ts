@@ -14,3 +14,10 @@ export const QUESTIONS = [...Array(234)].map((_, i) => {
     category: CATEGORIES[rand],
   };
 });
+
+export const QUESTION_MAP = (() => {
+  const map = new Map();
+  CATEGORIES.forEach((category) => map.set(category, []));
+  QUESTIONS.forEach((question) => map.get(question.category).push(question));
+  return map;
+})();

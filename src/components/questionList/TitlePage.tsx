@@ -19,6 +19,7 @@ const Container = styled.div`
 
 const Title = styled.h2`
   margin-bottom: ${pxToRem(10)};
+  font-weight: 700;
   font-size: ${pxToRem(36)};
 `;
 

@@ -1,8 +1,8 @@
-import { QUESTIONS } from '@constants/questions';
-import { CATEGORIES } from '@constants/categories';
+import { nanoid } from 'nanoid';
 import { useEffect } from 'react';
 import router from 'next/router';
-import { nanoid } from 'nanoid';
+import { QUESTIONS } from '@constants/questions';
+import { CATEGORIES } from '@constants/categories';
 import ContainerPage from '@components/common/ContainerPage';
 import { Quiz } from './Quiz';
 

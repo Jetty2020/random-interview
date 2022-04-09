@@ -29,14 +29,12 @@ export const QuestionList = () => {
       (ele) => ele.category === CATEGORIES[i],
     );
     for (let j = 0; j < questionIndexArr[i].length; j++) {
-      questionArr[i].push(questionCategoryArr[+questionIndexArr[i][j]]);
+      if (questionIndexArr[i][j] !== '') {
+        questionArr[i].push(questionCategoryArr[+questionIndexArr[i][j]]);
+      }
     }
   }
-  console.log(questionArr[0]);
-  console.log(questionArr[0][0].question);
 
-  // const existquestionList = questionArr.filter((e) => e[0] !== []);
-  // console.log(typeof existquestionList);
   return (
     <ContainerPage>
       {questionArr.map((e) =>

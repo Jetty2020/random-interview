@@ -1,9 +1,10 @@
 import styled from '@emotion/styled';
+import { pxToRem } from '@utils/pxToRem';
 
 export const VideoContainer = styled.div`
   position: relative;
-  width: 100%;
-  height: 100%;
+  width: ${pxToRem(500)};
+  height: ${pxToRem(400)};
 `;
 
 export const Video = styled.video`
@@ -17,4 +18,9 @@ export const Guideline = styled.div`
   position: absolute;
   top: 0;
   left: 0;
+`;
+
+export const Decibel = styled.meter`
+  width: ${pxToRem(500)};
+  height: ${pxToRem(50)};
 `;

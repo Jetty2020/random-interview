@@ -2,6 +2,8 @@ import { QUESTIONS } from '@constants/questions';
 import { CATEGORIES } from '@constants/categories';
 import { useEffect } from 'react';
 import router from 'next/router';
+import { nanoid } from 'nanoid';
+import { Quiz } from './Quiz';
 
 export const QuestionList = () => {
   const { 'question-list': questionList } = router.query as {
@@ -30,5 +32,26 @@ export const QuestionList = () => {
     }
   }
   console.log(questionArr[0]);
-  return <>ddu</>;
+  console.log(questionArr[0][0].question);
+
+  // const existquestionList = questionArr.filter((e) => e[0] !== []);
+  // console.log(typeof existquestionList);
+  return (
+    <>
+      {questionArr.map((e) =>
+        e.map(
+          (content: { question: string; answer: string; category: string }) => {
+            return (
+              <Quiz
+                key={nanoid()}
+                question={content.question}
+                category={content.category}
+                answer=""
+              />
+            );
+          },
+        ),
+      )}
+    </>
+  );
 };

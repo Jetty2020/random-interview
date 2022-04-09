@@ -1,20 +1,21 @@
 import { NextPage } from 'next';
-import { useRouter } from 'next/router';
-import { useRef } from 'react';
 
 const Result: NextPage = () => {
-  const router = useRouter();
-  const downloadRef = useRef<HTMLAnchorElement>(null);
-  const { downloadLink } = router.query as { downloadLink: string };
-  console.log('result 페이지의', downloadLink);
-  if (downloadRef && downloadRef.current) {
-    downloadRef.current.href = downloadLink;
-  }
+  const downloadRecording = async () => {
+    const RECORDING = JSON.parse(localStorage.getItem('recorded-interview'));
+    const BLOB = await (await fetch(RECORDING.audioBlob)).blob();
+    const DOWNLOAD = document.createElement('a');
+    DOWNLOAD.download = `Recording – ${RECORDING.name}`;
+    DOWNLOAD.href = URL.createObjectURL(BLOB);
+    document.body.appendChild(DOWNLOAD);
+    DOWNLOAD.click();
+    DOWNLOAD.remove();
+  };
 
   return (
-    <a ref={downloadRef} href="none" download="random-interview.mp4">
+    <button type="button" onClick={downloadRecording}>
       다운로드
-    </a>
+    </button>
   );
 };
 

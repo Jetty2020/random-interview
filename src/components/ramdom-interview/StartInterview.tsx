@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { GRAY_400, PRIMARY_200, PRIMARY_900, WHITE } from '@constants/colors';
 import { CATEGORIES } from '@constants/categories';
 import { QUESTIONS } from '@constants/questions';
+import { pxToRem } from '@utils/pxToRem';
 
 const selectIndex = (totalIndex: number, selectingNumber: number) => {
   const randomIndexArray = [];
@@ -92,7 +93,7 @@ export const StartInterview = () => {
   };
 
   return (
-    <Container>
+    <Section>
       <ListQuestionNum>
         {CATEGORIES.map((ele, idx) => {
           if (questionQueryArr[idx]) {
@@ -108,7 +109,7 @@ export const StartInterview = () => {
           return null;
         })}
       </ListQuestionNum>
-      <Container>
+      <ContainerInterview>
         <ContentQuestion>
           {
             QUESTIONS.filter(
@@ -118,7 +119,7 @@ export const StartInterview = () => {
           }
         </ContentQuestion>
         <Video />
-      </Container>
+      </ContainerInterview>
       <BtnContainer>
         <Btn type="button">종료하기</Btn>
         <Btn type="button" onClick={handleNextQuestion}>
@@ -129,14 +130,15 @@ export const StartInterview = () => {
             : '다음 질문'}
         </Btn>
       </BtnContainer>
-    </Container>
+    </Section>
   );
 };
 
-const Container = styled.section`
+const Section = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: ${pxToRem(35)};
 `;
 
 const ListQuestionNum = styled.ul`
@@ -149,40 +151,47 @@ const ItemQuestionNum = styled.li`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 67px;
-  height: 55px;
+  width: ${pxToRem(67)};
+  height: ${pxToRem(55)};
   background-color: ${PRIMARY_200};
-  border-radius: 15px;
+  border-radius: ${pxToRem(15)};
 
   & + & {
-    margin-left: 15px;
+    margin-left: ${pxToRem(15)};
   }
 `;
+
+const ContainerInterview = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
 const TitleCategory = styled.span`
-  font-size: 17px;
+  font-size: ${pxToRem(17)};
   font-weight: 500;
   margin-bottom: 3px;
 `;
 
 const ContentQuestion = styled.p`
-  font-size: 20px;
+  font-size: ${pxToRem(20)};
   text-align: center;
-  margin-top: 40px;
+  margin-top: ${pxToRem(40)};
 `;
 
 const Video = styled.div`
   width: 500px;
   height: 400px;
   background-color: ${GRAY_400};
-  margin-top: 40px;
+  margin-top: ${pxToRem(40)};
 `;
 
 const Btn = styled.button`
-  width: 160px;
-  height: 36px;
+  width: ${pxToRem(160)};
+  height: ${pxToRem(36)};
   margin: 0 auto;
   background-color: ${PRIMARY_900};
-  font-size: 18px;
+  font-size: ${pxToRem(18)};
   font-weight: 500;
   line-height: 1.6;
   color: ${WHITE};
@@ -191,6 +200,6 @@ const Btn = styled.button`
 
 const BtnContainer = styled.div`
   display: flex;
-  width: 500px;
-  margin-top: 50px;
+  width: ${pxToRem(500)};
+  margin-top: ${pxToRem(50)};
 `;

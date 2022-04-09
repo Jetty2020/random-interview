@@ -5,6 +5,7 @@ import router from 'next/router';
 import { GRAY_300, PRIMARY_900, RED_300, WHITE } from '@constants/colors';
 import { QUESTIONS } from '@constants/questions';
 import { CATEGORIES } from '@constants/categories';
+import { pxToRem } from '@utils/pxToRem';
 
 interface FormInputs {
   all: boolean;
@@ -134,7 +135,7 @@ export const SettingForm = () => {
   return (
     <>
       <Form onSubmit={handleSubmit(submitCategory)}>
-        <label htmlFor="all">
+        <LabelStyled htmlFor="all">
           <input
             id="all"
             type="checkbox"
@@ -143,8 +144,8 @@ export const SettingForm = () => {
             })}
           />
           전체
-        </label>
-        <label htmlFor="html">
+        </LabelStyled>
+        <LabelStyled htmlFor="html">
           <input
             id="html"
             type="checkbox"
@@ -153,8 +154,8 @@ export const SettingForm = () => {
             })}
           />
           HTML
-        </label>
-        <label htmlFor="css">
+        </LabelStyled>
+        <LabelStyled htmlFor="css">
           <input
             id="css"
             type="checkbox"
@@ -163,8 +164,8 @@ export const SettingForm = () => {
             })}
           />
           CSS
-        </label>
-        <label htmlFor="js">
+        </LabelStyled>
+        <LabelStyled htmlFor="js">
           <input
             id="js"
             type="checkbox"
@@ -173,8 +174,8 @@ export const SettingForm = () => {
             })}
           />
           JS
-        </label>
-        <label htmlFor="web">
+        </LabelStyled>
+        <LabelStyled htmlFor="web">
           <input
             id="web"
             type="checkbox"
@@ -183,12 +184,12 @@ export const SettingForm = () => {
             })}
           />
           web
-        </label>
-        <label htmlFor="react">
+        </LabelStyled>
+        <LabelStyled htmlFor="react">
           <input id="react" type="checkbox" value={1} {...register('react')} />
           react
-        </label>
-        <LabelCount htmlFor="quizCount">
+        </LabelStyled>
+        <LabelStyled htmlFor="quizCount">
           질문 개수 :
           <InputCount
             id="quizCount"
@@ -200,8 +201,9 @@ export const SettingForm = () => {
             })}
           />
           개
-        </LabelCount>
+        </LabelStyled>
         {errMsg ? <TextError>{errMsg}</TextError> : null}
+        <ContainerRecordSetting />
         <BtnSubmit type="submit" disabled={Boolean(errMsg)}>
           시작하기
         </BtnSubmit>
@@ -216,47 +218,46 @@ export const SettingForm = () => {
 
 const Form = styled.form`
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(6, 2fr) 3fr;
   text-align: center;
-  width: 600px;
-  margin: 0 auto;
-  padding: 35px;
+  margin: ${pxToRem(60)} auto 0;
+  padding: ${pxToRem(35)} ${pxToRem(60)};
   border: 3px double ${PRIMARY_900};
 `;
 
-const LabelCount = styled.label`
+const LabelStyled = styled.label`
   display: flex;
   align-items: center;
-  grid-column: 1 / span 6;
-  margin: 10px auto 20px;
+  justify-content: center;
+  width: 100%;
 `;
 
 const InputCount = styled.input`
-  width: 50px;
-  height: 25px;
-  margin: 10px;
+  width: ${pxToRem(50)};
+  height: ${pxToRem(25)};
+  margin: 0 ${pxToRem(10)};
   text-align: right;
 `;
 
 const TextError = styled.p`
-  grid-column: 1 / span 6;
+  grid-column: 1 / span 7;
   text-align: center;
-  margin: -20px 0 20px;
-  font-size: 13px;
+  margin: ${pxToRem(-20)} 0 ${pxToRem(20)};
+  font-size: ${pxToRem(13)};
   color: ${RED_300};
 `;
 
 const BtnSubmit = styled.button`
-  grid-column: 1 / span 6;
-  width: 200px;
-  height: 36px;
+  grid-column: 1 / span 7;
+  width: ${pxToRem(200)};
+  height: ${pxToRem(36)};
   margin: 0 auto;
   background-color: ${PRIMARY_900};
-  font-size: 20px;
+  font-size: ${pxToRem(20)};
   font-weight: 600;
   line-height: 1.6;
   color: ${WHITE};
-  border-radius: 10px;
+  border-radius: ${pxToRem(10)};
 
   &:disabled {
     background-color: ${GRAY_300};
@@ -266,4 +267,12 @@ const BtnSubmit = styled.button`
 const Notice = styled.div`
   margin-top: 5px;
   color: ${RED_300};
+  text-align: center;
+`;
+
+const ContainerRecordSetting = styled.div`
+  grid-column: 1 / span 7;
+  width: 100%;
+  height: 50vh;
+  background-color: #eee;
 `;

@@ -17,14 +17,7 @@ const RandomPlay: NextPage = () => {
   const { recordMethod, audioInput, videoInput } =
     router.query as unknown as IMediaProps;
 
-  const goToResult = (e: { preventDefault: () => void }) => {
-    console.log('result 페이지로 보내는', downloadLink);
-    e.preventDefault();
-    router.push({
-      pathname: '/result',
-      // query: { downloadLink },
-    });
-  };
+  console.log('랜덤플레이 페이지에서 받은 recordMethod', recordMethod);
 
   useEffect(() => {
     console.log('RandomPlay 페이지 마운트');
@@ -35,7 +28,7 @@ const RandomPlay: NextPage = () => {
 
   return (
     <>
-      {recordMethod !== 'none' && (
+      {!(recordMethod === 'none' || recordMethod === undefined) && (
         <Media
           isTest={false}
           isRecording={true}
@@ -45,10 +38,7 @@ const RandomPlay: NextPage = () => {
           setDownloadLink={setDownloadLink}
         />
       )}
-      {/* <a href="/result" onClick={goToResult}>
-        결과 페이지로 이동
-      </a> */}
-      <Link href="/result">결과 페이지로 이동 링크</Link>
+      <Link href="/result">종료하기 or 문제리스트 보기</Link>
     </>
   );
 };

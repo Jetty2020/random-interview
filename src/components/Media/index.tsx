@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router';
-import { Dispatch, SetStateAction, useEffect, useRef } from 'react';
-import Image from 'next/image';
-import Guideline from 'public/guideline.svg';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import Guideline from '@assets/icon/guideline.svg';
 import * as Styled from './styled';
 
 interface IMediaProps {
@@ -21,19 +20,23 @@ const Media = ({
   isTest,
   setDownloadLink,
 }: IMediaProps) => {
-  console.log(recordMethod);
-  const router = useRouter();
+  console.log('props로 받은 recordMethod:', recordMethod);
   const audioRef = useRef<HTMLAudioElement>(null);
-  const meterRef = useRef<HTMLMeterElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const meterRef = useRef<HTMLMeterElement>(null);
+  // const chunk = useRef<BlobPart[]>([]);
+  // const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder>();
+  // const [mediaStream, setMediaStream] = useState<MediaStream>(
+  //   null as unknown as MediaStream,
+  // );
   const recordedBlob: BlobPart[] = [];
   let mediaRecorder: MediaRecorder;
-  let stream: MediaStream | null = null;
-
+  let mediaStream: MediaStream | null = null;
+  console.log('컴포넌트 실행 시 mediaStream', mediaStream);
   const CONSTRAINTS = {
     video:
       recordMethod === 'video' || recordMethod === 'full'
-        ? { deviceId: videoInput }
+        ? { deviceId: videoInput, width: 500, height: 400 }
         : false,
     audio:
       recordMethod === 'audio' || recordMethod === 'full'
@@ -41,97 +44,124 @@ const Media = ({
         : false,
   };
 
-  const startRecording = (stream: MediaStream) => {
-    const MEDIA_TYPE = recordMethod === 'audio' ? 'audio/mp4' : 'video/mp4';
-
-    mediaRecorder = new MediaRecorder(stream);
-    mediaRecorder.ondataavailable = (e) => {
-      recordedBlob.push(e.data);
-    };
-    mediaRecorder.start(1000);
+  // 기록 시작
+  const startRecording = (mediaStream: MediaStream) => {
+    localStorage.removeItem('recorded-interview');
+    // const MEDIA_TYPE = recordMethod === 'audio' ? 'audio/mp4' : 'video/mp4';
+    mediaRecorder = new MediaRecorder(mediaStream);
+    if (mediaRecorder) {
+      mediaRecorder.ondataavailable = (e) => {
+        recordedBlob.push(e.data);
+      };
+      mediaRecorder.start(1000);
+    }
   };
 
+  // 기록 저장
+  const saveRecording = async () => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const audioBlob = e.target.result;
+      window.localStorage.setItem(
+        'recorded-interview',
+        JSON.stringify(audioBlob),
+      );
+    };
+    reader.readAsDataURL(audioBlob);
+  };
+
+  // 기록 중지
   const stopRecording = () => {
     // const MEDIA_TYPE = recordMethod === 'audio' ? 'audio/mp4' : 'video/mp4';
-    mediaRecorder.pause();
-    mediaRecorder.stop();
-    const downloadLink = URL.createObjectURL(
-      // new Blob(recordedBlob, { type: MEDIA_TYPE }),
-      new Blob(recordedBlob),
-    );
-    console.log('Media 컴포넌트의', downloadLink);
-    setDownloadLink?.(downloadLink);
-    router.push(
-      {
-        pathname: '/result',
-        query: { downloadLink },
-      },
-      '/result',
-      { shallow: true },
-    );
+    if (mediaRecorder) {
+      // mediaRecorder.pause();
+      mediaRecorder.stop();
+    }
+    if (isRecording) {
+      saveRecording();
+    }
   };
 
-  const VUmeter = (stream: MediaStream) => {
+  // 시각화
+  const DecibelMeter = (mediaStream: MediaStream) => {
     const audioContext = new AudioContext();
-    const mediaStreamAudioSourceNode =
-      audioContext.createMediaStreamSource(stream);
-    const analyserNode = audioContext.createAnalyser();
-    mediaStreamAudioSourceNode.connect(analyserNode);
+    const analyser = audioContext.createAnalyser();
+    const mediaStreamSource = audioContext.createMediaStreamSource(mediaStream);
+    const unit8Array = new Uint8Array(analyser.frequencyBinCount);
+    mediaStreamSource.connect(analyser);
 
-    const pcmData = new Float32Array(analyserNode.fftSize);
-    const onFrame = () => {
-      analyserNode.getFloatTimeDomainData(pcmData);
-      let sumSquares = 0.0;
-      for (const amplitude of pcmData) {
-        sumSquares += amplitude * amplitude;
-      }
+    const visualize = () => {
+      // console.log('시각화 단계의 mediaStream', mediaStream);
+      analyser.getByteFrequencyData(unit8Array);
+      const decibel = Math.floor((Math.max(...unit8Array) / 255) * 100);
+      // let rafId = 0;
       if (meterRef && meterRef.current) {
-        meterRef.current.value = Math.sqrt(sumSquares / pcmData.length);
+        meterRef.current.value = decibel;
       }
-      window.requestAnimationFrame(onFrame);
+      if (recordMethod === 'audio') {
+        // console.log(recordMethod);
+        // console.log('시각화 시작');
+        requestAnimationFrame(visualize);
+      } else {
+        console.log('audioContext 종료');
+        audioContext.close();
+        // cancelAnimationFrame(rafId);
+        if (meterRef && meterRef.current) {
+          meterRef.current.value = 0;
+        }
+      }
     };
-    window.requestAnimationFrame(onFrame);
+
+    if (recordMethod === 'audio' || recordMethod === 'full') {
+      console.log('DecibelMeter의 recordMethod', recordMethod);
+      visualize();
+    }
   };
 
+  // 미디어 시작
   const startMedia = async (CONSTRAINTS: MediaStreamConstraints) => {
     try {
-      stream = await navigator.mediaDevices.getUserMedia(CONSTRAINTS);
+      mediaStream = await navigator.mediaDevices.getUserMedia(CONSTRAINTS);
+      console.log('media 시작 시 mediaStream', mediaStream);
       if (recordMethod === 'audio') {
         if (audioRef && audioRef.current) {
           const $audio = audioRef.current;
-          $audio.srcObject = stream;
+          $audio.srcObject = mediaStream;
           $audio.play();
         }
-        VUmeter(stream);
       } else if (recordMethod === 'video' || recordMethod === 'full') {
         if (videoRef && videoRef.current) {
           const $video = videoRef.current;
-          $video.srcObject = stream;
+          $video.srcObject = mediaStream;
           $video.play();
         }
       }
+      DecibelMeter(mediaStream);
 
       if (isRecording) {
-        startRecording(stream);
+        startRecording(mediaStream);
       }
     } catch (error) {
       console.error(error);
     }
   };
 
+  // 미디어 중지
   const stopMedia = () => {
-    if (stream) {
-      stream.getTracks().forEach((track) => {
+    if (mediaStream) {
+      console.log('미디어스트림 중지');
+      mediaStream.getTracks().forEach((track) => {
+        console.log(track);
         track.stop();
       });
+      mediaStream = null;
+      console.log('중지 후', mediaStream);
     }
   };
 
   useEffect(() => {
     console.log('Media 컴포넌트 마운트');
-    if (recordMethod !== undefined) {
-      startMedia(CONSTRAINTS);
-    }
+    startMedia(CONSTRAINTS);
     return () => {
       console.log('Media 컴포넌트 언마운트');
       stopMedia();
@@ -139,21 +169,26 @@ const Media = ({
         stopRecording();
       }
     };
-  }, [CONSTRAINTS]);
+  }, [recordMethod]);
 
   return (
     <section>
-      {recordMethod === 'audio' ? (
-        <>
-          <meter ref={meterRef} max={1} />
-          {/* <audio ref={audioRef} muted controls /> */}
-        </>
-      ) : (
+      {(recordMethod === 'audio' || recordMethod === 'full') && isTest && (
+        <Styled.Decibel
+          ref={meterRef}
+          min={0}
+          low={30}
+          optimum={50}
+          high={80}
+          max={100}
+        />
+      )}
+      {recordMethod !== 'audio' && (
         <Styled.VideoContainer>
           <Styled.Video ref={videoRef} muted />
           {isTest && (
             <Styled.Guideline>
-              <Image src={Guideline} layout="fill" />
+              <Guideline />
             </Styled.Guideline>
           )}
         </Styled.VideoContainer>

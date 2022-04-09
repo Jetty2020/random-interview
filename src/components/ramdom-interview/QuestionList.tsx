@@ -1,9 +1,11 @@
 import { nanoid } from 'nanoid';
+import styled from '@emotion/styled';
 import { useEffect } from 'react';
 import router from 'next/router';
 import { QUESTIONS } from '@constants/questions';
 import { CATEGORIES } from '@constants/categories';
-import ContainerPage from '@components/common/ContainerPage';
+import { pxToRem } from '@utils/pxToRem';
+import { GRAY_400 } from '@constants/colors';
 import { Quiz } from './Quiz';
 
 export const QuestionList = () => {
@@ -29,30 +31,48 @@ export const QuestionList = () => {
       (ele) => ele.category === CATEGORIES[i],
     );
     for (let j = 0; j < questionIndexArr[i].length; j++) {
-      questionArr[i].push(questionCategoryArr[+questionIndexArr[i][j]]);
+      if (questionIndexArr[i][j] !== '') {
+        questionArr[i].push(questionCategoryArr[+questionIndexArr[i][j]]);
+      }
     }
   }
-  console.log(questionArr[0]);
-  console.log(questionArr[0][0].question);
 
-  // const existquestionList = questionArr.filter((e) => e[0] !== []);
-  // console.log(typeof existquestionList);
   return (
-    <ContainerPage>
+    <ContainerUL>
       {questionArr.map((e) =>
         e.map(
-          (content: { question: string; answer: string; category: string }) => {
+          (
+            content: { question: string; answer: string; category: string },
+            index: number,
+          ) => {
+            console.log(index);
             return (
-              <Quiz
-                key={nanoid()}
-                question={content.question}
-                category={content.category}
-                answer={content.answer}
-              />
+              <List key={nanoid()}>
+                {index === 0 ? (
+                  <CategoryMark key={nanoid()}>{content.category}</CategoryMark>
+                ) : null}
+                <Quiz
+                  key={nanoid()}
+                  question={content.question}
+                  answer={content.answer}
+                />
+              </List>
             );
           },
         ),
       )}
-    </ContainerPage>
+    </ContainerUL>
   );
 };
+const ContainerUL = styled.ul``;
+
+const List = styled.li`
+  margin: ${pxToRem(10)};
+`;
+
+const CategoryMark = styled.div`
+  font-weight: 900;
+  font-size: ${pxToRem(40)};
+  color: ${GRAY_400};
+  margin: ${pxToRem(10)} ${pxToRem(40)};
+`;

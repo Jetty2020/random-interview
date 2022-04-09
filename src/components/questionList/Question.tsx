@@ -62,14 +62,14 @@ const ButtonQuestion = styled.button<ButtonProps>`
   }
 `;
 
-const QuestionMark = styled.span`
+export const QuestionMark = styled.span`
   padding-right: ${pxToRem(10)};
   font-weight: 700;
   font-size: ${pxToRem(36)};
   color: ${PRIMARY_400};
 `;
 
-const Text = styled.span`
+export const Text = styled.span`
   line-height: ${pxToRem(30)};
   font-size: ${pxToRem(20)};
 `;
@@ -91,7 +91,7 @@ const ButtonAnswer = styled.button<ButtonProps>`
   }
 `;
 
-const AnswerMark = styled.span`
+export const AnswerMark = styled.span`
   padding-right: ${pxToRem(10)};
   font-weight: 700;
   font-size: ${pxToRem(36)};

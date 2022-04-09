@@ -61,15 +61,13 @@ export const StartInterview = () => {
     );
   }, []);
 
+  const handelQuit = () => {
+    const newArr = questionIndexArr.map((ele) => ele.join('*')).join('-');
+    router.push(`/random-interview?question-list=${newArr}`);
+  };
+
   const handleNextQuestion = () => {
     if (
-      questionQueryArr[questionContent[0]] ===
-        progressArr[questionContent[0]] &&
-      questionQueryArr.length - 1 === questionContent[0]
-    ) {
-      const newArr = questionIndexArr.map((ele) => ele.join('*')).join('-');
-      router.push(`/random-interview?question-list=${newArr}`);
-    } else if (
       questionQueryArr[questionContent[0]] === progressArr[questionContent[0]]
     ) {
       let check = 1;
@@ -121,14 +119,20 @@ export const StartInterview = () => {
         <Video />
       </ContainerInterview>
       <BtnContainer>
-        <Btn type="button">종료하기</Btn>
-        <Btn type="button" onClick={handleNextQuestion}>
+        <Btn type="button" onClick={handelQuit}>
           {questionQueryArr[questionContent[0]] ===
             progressArr[questionContent[0]] &&
           questionQueryArr.length - 1 === questionContent[0]
             ? '질문 리스트 보기'
-            : '다음 질문'}
+            : '종료하기'}
         </Btn>
+        {questionQueryArr[questionContent[0]] ===
+          progressArr[questionContent[0]] &&
+        questionQueryArr.length - 1 === questionContent[0] ? null : (
+          <Btn type="button" onClick={handleNextQuestion}>
+            다음 질문
+          </Btn>
+        )}
       </BtnContainer>
     </Section>
   );

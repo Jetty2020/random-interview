@@ -47,7 +47,7 @@ export const QuestionList = () => {
                 key={nanoid()}
                 question={content.question}
                 category={content.category}
-                answer=""
+                answer={content.answer}
               />
             );
           },

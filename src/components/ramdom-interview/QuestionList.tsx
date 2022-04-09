@@ -3,6 +3,7 @@ import { CATEGORIES } from '@constants/categories';
 import { useEffect } from 'react';
 import router from 'next/router';
 import { nanoid } from 'nanoid';
+import ContainerPage from '@components/common/ContainerPage';
 import { Quiz } from './Quiz';
 
 export const QuestionList = () => {
@@ -37,7 +38,7 @@ export const QuestionList = () => {
   // const existquestionList = questionArr.filter((e) => e[0] !== []);
   // console.log(typeof existquestionList);
   return (
-    <>
+    <ContainerPage>
       {questionArr.map((e) =>
         e.map(
           (content: { question: string; answer: string; category: string }) => {
@@ -52,6 +53,6 @@ export const QuestionList = () => {
           },
         ),
       )}
-    </>
+    </ContainerPage>
   );
 };

@@ -28,7 +28,7 @@ const Header = styled.header`
   width: 100%;
   position: sticky;
   top: 0;
-  z-index: 1;
+  z-index: 30;
   border-bottom: 1px solid #ddd;
   background-color: ${WHITE};
 `;

@@ -20,11 +20,11 @@ const Media = ({
   isRecording,
   isTest,
 }: IMediaProps) => {
-  const audioRef = useRef<HTMLAudioElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const meterRef = useRef<HTMLMeterElement>(null);
   const recordedBlob: BlobPart[] = [];
-  const MIME_TYPE = recordMethod === 'audio' ? 'audio/webm' : 'video/webm';
+  const MIME_TYPE =
+    recordMethod === 'audio' ? 'audio/webm;codecs=opus' : 'video/webm';
   const CONSTRAINTS = {
     video:
       recordMethod === 'video' || recordMethod === 'full'
@@ -39,48 +39,29 @@ const Media = ({
   let mediaStream: MediaStream | null = null;
   let rafId = 0;
 
-  // 기록 시작
   const startRecording = (mediaStream: MediaStream) => {
-    localStorage.removeItem('recorded-interview');
     if (indexedDB) {
       const request = indexedDB.open('random-interview');
       request.onupgradeneeded = () => {
         const db = request.result;
         db.createObjectStore('recordings');
       };
-
-      // request.onsuccess = () => {
-
-      // };
-
       request.onerror = (e) => {
-        console.log(e);
+        console.error(e);
       };
     }
 
     mediaRecorder = new MediaRecorder(mediaStream);
-    console.log(MediaRecorder.isTypeSupported('audio/webm'));
     if (mediaRecorder && recordedBlob.length === 0) {
       mediaRecorder.ondataavailable = (e) => {
         recordedBlob.push(e.data);
-        console.log(recordedBlob);
-        // await saveRecording();
       };
-      mediaRecorder.start(500);
+      mediaRecorder.start(1000);
     }
   };
 
-  // 기록 저장
-  const saveRecording = async () => {
-    const fileReader = new FileReader();
-    fileReader.onload = (e: ProgressEvent<FileReader>) => {
-      const audioSafe = e.target?.result;
-      localStorage.setItem('recorded-interview', JSON.stringify(audioSafe));
-    };
+  const saveRecording = () => {
     const mergedBlob = new Blob(recordedBlob, { type: MIME_TYPE });
-    fileReader.readAsDataURL(mergedBlob);
-
-    // indexedDB
     const request = indexedDB.open('random-interview');
     request.onsuccess = () => {
       const db = request.result;
@@ -90,16 +71,15 @@ const Media = ({
     };
   };
 
-  // 기록 중지
   const stopRecording = () => {
     if (mediaRecorder) {
-      mediaRecorder.pause();
       mediaRecorder.stop();
+      setTimeout(() => {
+        saveRecording();
+      }, 0);
     }
-    saveRecording();
   };
 
-  // 시각화
   const DecibelMeter = (mediaStream: MediaStream) => {
     const audioContext = new AudioContext();
     const analyser = audioContext.createAnalyser();
@@ -115,32 +95,22 @@ const Media = ({
       }
       rafId = requestAnimationFrame(visualize);
     };
-
     visualize();
   };
 
-  // 미디어 시작
   const startMedia = async (CONSTRAINTS: MediaStreamConstraints) => {
     try {
       mediaStream = await navigator.mediaDevices.getUserMedia(CONSTRAINTS);
-      if (recordMethod === 'audio') {
-        if (audioRef && audioRef.current) {
-          const $audio = audioRef.current;
-          $audio.srcObject = mediaStream;
-          $audio.play();
-        }
-      } else if (recordMethod === 'video' || recordMethod === 'full') {
+      if (recordMethod === 'video' || recordMethod === 'full') {
         if (videoRef && videoRef.current) {
           const $video = videoRef.current;
           $video.srcObject = mediaStream;
           $video.play();
         }
       }
-
       if (recordMethod !== 'video') {
         DecibelMeter(mediaStream);
       }
-
       if (isRecording) {
         startRecording(mediaStream);
       }
@@ -149,7 +119,6 @@ const Media = ({
     }
   };
 
-  // 미디어 중지
   const stopMedia = () => {
     if (mediaStream) {
       mediaStream.getTracks().forEach((track) => {
@@ -183,14 +152,14 @@ const Media = ({
         />
       )}
       {recordMethod !== 'audio' && (
-        <VideoContainer>
+        <ContainerVideo>
           <Video ref={videoRef} muted />
           {isTest && (
-            <GuidelineContainer>
+            <ContainerGuideline>
               <Guideline />
-            </GuidelineContainer>
+            </ContainerGuideline>
           )}
-        </VideoContainer>
+        </ContainerVideo>
       )}
       {recordMethod === 'audio' && !isTest && (
         <RecordingNotice>
@@ -202,7 +171,7 @@ const Media = ({
   );
 };
 
-const VideoContainer = styled.div`
+const ContainerVideo = styled.div`
   position: relative;
   width: ${pxToRem(500)};
   height: ${pxToRem(400)};
@@ -213,12 +182,12 @@ const Video = styled.video`
   height: 100%;
 `;
 
-const GuidelineContainer = styled.div`
-  width: 100%;
-  height: 100%;
+const ContainerGuideline = styled.div`
   position: absolute;
   top: 0;
   left: 0;
+  width: 100%;
+  height: 100%;
 `;
 
 const Decibel = styled.meter`
@@ -229,12 +198,12 @@ const Decibel = styled.meter`
 const pulse = keyframes`
     40% {
         transform: scale(1.1);
-        box-shadow: 0 0 0 10px rgba(255, 0, 0, 0.3);
+        box-shadow: 0 0 0 5px rgba(255, 0, 0, 0.3);
     }
 
     80% {
         transform: scale(1);
-        box-shadow: 0 0 0 15px rgba(255, 0, 0, 0);
+        box-shadow: 0 0 0 10px rgba(255, 0, 0, 0);
     }
 
     100% {
@@ -255,9 +224,9 @@ const RecordingNotice = styled.div`
 const Pulse = styled.div`
   width: ${pxToRem(30)};
   height: ${pxToRem(30)};
+  margin-bottom: ${pxToRem(10)};
   border-radius: 50%;
   background-color: ${ERROR};
-  margin-bottom: ${pxToRem(10)};
   animation: ${pulse} 2.5s infinite;
 `;
 

@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import React, { SetStateAction } from 'react';
+import { nanoid } from 'nanoid';
 import { pxToRem } from '@utils/pxToRem';
 import { QuestionData } from '@constants/.';
 import Question from './Question';
@@ -23,7 +24,11 @@ export const ListQuestion = React.memo(function ListQuestion({
       <List>
         {questions
           .map(({ question, answer }) => (
-            <Question key={question} question={question} answer={answer} />
+            <Question
+              key={`Question-${nanoid()}`}
+              question={question}
+              answer={answer}
+            />
           ))
           .slice((page - 1) * 10, page * 10)}
       </List>
@@ -37,7 +42,7 @@ export const ListQuestion = React.memo(function ListQuestion({
 });
 
 const Container = styled.div`
-  padding: ${pxToRem(10)} 0;
+  padding: ${pxToRem(10, 0)};
 
   & li:not(:last-of-type) {
     margin-bottom: ${pxToRem(30)};
@@ -45,7 +50,7 @@ const Container = styled.div`
 `;
 
 const List = styled.ul`
-  padding: 0 ${pxToRem(20)};
+  padding: 0 ${pxToRem(0, 20)};
 `;
 
 export default React.memo(ListQuestion);

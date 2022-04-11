@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import React from 'react';
+import { nanoid } from 'nanoid';
 import { CATEGORIES } from '@constants/categories';
 import { pxToRem } from '@utils/pxToRem';
 import Category from './Category';
@@ -21,7 +22,7 @@ export const ListCategory = React.memo(function ListCategory({
         <ul>
           {CATEGORIES.map((category, index) => (
             <Category
-              key={category}
+              key={`Category-${nanoid()}`}
               category={category}
               isSelected={selection[index]}
               isActive={selection.some((isSelected) => isSelected)}

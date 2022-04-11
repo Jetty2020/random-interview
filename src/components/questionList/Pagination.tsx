@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import React, { useCallback } from 'react';
+import { nanoid } from 'nanoid';
 import { GRAY_100, GRAY_200, GRAY_500, GRAY_700 } from '@constants/colors';
 import { pxToRem } from '@utils/pxToRem';
 import { PAGE_MAX } from '@constants/pagination';
@@ -43,7 +44,7 @@ const Pagination = ({ page, setPage, lastPage }: PaginationProps) => {
       {[...Array(lastPage)]
         .map((_, i) => (
           <ButtonNumber
-            key={`PageNumber-${i + 1}`}
+            key={`PageNumber-${i + 1}-${nanoid()}`}
             selected={page === i + 1}
             onClick={() => {
               setPage(() => i + 1);

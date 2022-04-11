@@ -14,7 +14,7 @@ export const TitlePage = React.memo(function TitlePage() {
 
 const Container = styled.div`
   height: ${pxToRem(100)};
-  padding: ${pxToRem(50)} 0 0 ${pxToRem(30)};
+  padding: ${pxToRem(50, 0, 0, 30)};
 `;
 
 const Title = styled.h2`

@@ -73,7 +73,9 @@ const Question = ({ question, answer }: QuestionProps) => {
 };
 
 const Item = styled.li`
+  overflow: hidden;
   margin: 0 auto;
+  word-break: break-all;
 `;
 
 const ButtonQuestion = styled.button<QuestionButtonProps>`
@@ -98,6 +100,7 @@ const ButtonQuestion = styled.button<QuestionButtonProps>`
 `;
 
 const QuestionMark = styled.span`
+  align-self: flex-start;
   padding-right: ${pxToRem(10)};
   font-weight: 700;
   font-size: ${pxToRem(36)};
@@ -112,7 +115,6 @@ export const Text = styled.span`
 const ButtonAnswer = styled.button<AnswerButtonProps>`
   display: inline-flex;
   align-items: center;
-  overflow: hidden;
   width: 100%;
   min-height: ${pxToRem(60)};
   padding: ${pxToRem(10)};
@@ -129,6 +131,7 @@ const ButtonAnswer = styled.button<AnswerButtonProps>`
 `;
 
 const AnswerMark = styled.span`
+  align-self: flex-start;
   padding-right: ${pxToRem(10)};
   font-weight: 700;
   font-size: ${pxToRem(36)};

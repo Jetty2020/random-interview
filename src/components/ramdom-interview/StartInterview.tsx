@@ -1,7 +1,8 @@
 import styled from '@emotion/styled';
 import router from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
-import { GRAY_400, PRIMARY_200, PRIMARY_900, WHITE } from '@constants/colors';
+import Media from '@components/Media';
+import { PRIMARY_200, PRIMARY_900, WHITE } from '@constants/colors';
 import { CATEGORIES } from '@constants/categories';
 import { QUESTIONS } from '@constants/questions';
 import { pxToRem } from '@utils/pxToRem';
@@ -19,10 +20,17 @@ const selectIndex = (totalIndex: number, selectingNumber: number) => {
   return randomIndexArray;
 };
 
+interface IStarInterviewProps {
+  question: string;
+  recordMethod: string;
+  audioInput: string;
+  videoInput: string;
+}
+
 export const StartInterview = () => {
-  const { question } = router.query;
+  const { question, recordMethod, audioInput, videoInput } =
+    router.query as unknown as IStarInterviewProps;
   const [questionIndexArr, setQuestionIndexArr] = useState<number[][]>([[]]);
-  console.log('question', question);
   const [questionContent, setQuestionContent] = useState([0, 0]);
 
   const questionQueryArr =
@@ -32,8 +40,6 @@ export const StartInterview = () => {
       .map((ele) => +ele) || [];
 
   const firstStartCategory = questionQueryArr.findIndex((e) => e !== 0);
-  console.log(`firstStartCategory ${firstStartCategory}`);
-  console.log('questionQueryArr', questionQueryArr);
   const [progressArr, setProgressArr] = useState(
     Array(questionQueryArr.length)
       .fill(0)
@@ -116,7 +122,15 @@ export const StartInterview = () => {
               ?.question
           }
         </ContentQuestion>
-        <Video />
+        <MediaContainer>
+          <Media
+            isTest={false}
+            isRecording={true}
+            recordMethod={recordMethod}
+            audioInput={audioInput}
+            videoInput={videoInput}
+          />
+        </MediaContainer>
       </ContainerInterview>
       <BtnContainer>
         <Btn type="button" onClick={handelQuit}>
@@ -183,10 +197,7 @@ const ContentQuestion = styled.p`
   margin-top: ${pxToRem(40)};
 `;
 
-const Video = styled.div`
-  width: 500px;
-  height: 400px;
-  background-color: ${GRAY_400};
+const MediaContainer = styled.div`
   margin-top: ${pxToRem(40)};
 `;
 

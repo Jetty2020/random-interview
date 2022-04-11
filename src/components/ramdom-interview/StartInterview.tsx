@@ -69,7 +69,13 @@ export const StartInterview = () => {
 
   const handelQuit = () => {
     const newArr = questionIndexArr.map((ele) => ele.join('*')).join('-');
-    router.push(`/random-interview?question-list=${newArr}`);
+    router.push(
+      {
+        pathname: 'random-interview',
+        query: { 'question-list': newArr, recordMethod },
+      },
+      'random-interview/question-list',
+    );
   };
 
   const handleNextQuestion = () => {
@@ -122,17 +128,19 @@ export const StartInterview = () => {
               ?.question
           }
         </ContentQuestion>
-        <MediaContainer>
-          <Media
-            isTest={false}
-            isRecording={true}
-            recordMethod={recordMethod}
-            audioInput={audioInput}
-            videoInput={videoInput}
-          />
-        </MediaContainer>
+        {recordMethod && (
+          <ContainerMedia>
+            <Media
+              isTest={false}
+              isRecording={true}
+              recordMethod={recordMethod}
+              audioInput={audioInput}
+              videoInput={videoInput}
+            />
+          </ContainerMedia>
+        )}
       </ContainerInterview>
-      <BtnContainer>
+      <ContainerBtn>
         <Btn type="button" onClick={handelQuit}>
           {questionQueryArr[questionContent[0]] ===
             progressArr[questionContent[0]] &&
@@ -147,7 +155,7 @@ export const StartInterview = () => {
             다음 질문
           </Btn>
         )}
-      </BtnContainer>
+      </ContainerBtn>
     </Section>
   );
 };
@@ -197,7 +205,7 @@ const ContentQuestion = styled.p`
   margin-top: ${pxToRem(40)};
 `;
 
-const MediaContainer = styled.div`
+const ContainerMedia = styled.div`
   margin-top: ${pxToRem(40)};
 `;
 
@@ -213,7 +221,7 @@ const Btn = styled.button`
   border-radius: 10px;
 `;
 
-const BtnContainer = styled.div`
+const ContainerBtn = styled.div`
   display: flex;
   width: ${pxToRem(500)};
   margin-top: ${pxToRem(50)};

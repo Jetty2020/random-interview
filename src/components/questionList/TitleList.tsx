@@ -26,7 +26,7 @@ const Title = styled.p<TitleProps>`
     `}
   z-index: 20;
   box-sizing: border-box;
-  padding: ${pxToRem(27)} 0 ${pxToRem(27)} ${pxToRem(20)};
+  padding: ${pxToRem(27, 0, 27, 20)};
   margin-bottom: ${pxToRem(20)};
   border-bottom: ${pxToRem(2)} solid ${GRAY_100};
   background-color: ${WHITE};

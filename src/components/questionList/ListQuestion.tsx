@@ -42,7 +42,7 @@ export const ListQuestion = React.memo(function ListQuestion({
 });
 
 const Container = styled.div`
-  padding: ${pxToRem(10)} 0;
+  padding: ${pxToRem(10, 0)};
 
   & li:not(:last-of-type) {
     margin-bottom: ${pxToRem(30)};
@@ -50,7 +50,7 @@ const Container = styled.div`
 `;
 
 const List = styled.ul`
-  padding: 0 ${pxToRem(20)};
+  padding: 0 ${pxToRem(0, 20)};
 `;
 
 export default React.memo(ListQuestion);

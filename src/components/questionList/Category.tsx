@@ -69,8 +69,8 @@ const Button = styled.button<ButtonProps>`
     bottom: 0;
     right: 0;
     width: 0;
-    border-left: 12px solid transparent;
-    border-bottom: 12px solid ${WHITE};
+    border-left: ${pxToRem(12)} solid transparent;
+    border-bottom: ${pxToRem(12)} solid ${WHITE};
   }
 
   &:hover {

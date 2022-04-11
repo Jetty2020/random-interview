@@ -1,0 +1,13 @@
+<svg width="500" height="400" viewBox="0 0 500 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="203.125" y="184.167" width="93.75" height="8.33333" fill="white"/>
+<rect y="391.667" width="93.75" height="8.33333" fill="white"/>
+<rect width="93.75" height="8.33333" fill="white"/>
+<rect x="406.25" width="93.75" height="8.33333" fill="white"/>
+<rect x="406.25" y="391.667" width="93.75" height="8.33333" fill="white"/>
+<rect x="246.094" y="257.5" width="100" height="7.8125" transform="rotate(-90 246.094 257.5)" fill="white"/>
+<rect y="400" width="100" height="7.8125" transform="rotate(-90 0 400)" fill="white"/>
+<rect y="100" width="100" height="7.8125" transform="rotate(-90 0 100)" fill="white"/>
+<rect x="492.188" y="100" width="100" height="7.8125" transform="rotate(-90 492.188 100)" fill="white"/>
+<rect x="492.188" y="400" width="100" height="7.8125" transform="rotate(-90 492.188 400)" fill="white"/>
+<path d="M312.969 200C312.969 245.794 283.752 280.833 250 280.833C216.248 280.833 187.031 245.794 187.031 200C187.031 154.206 216.248 119.167 250 119.167C283.752 119.167 312.969 154.206 312.969 200Z" stroke="white" stroke-width="10"/>
+</svg>

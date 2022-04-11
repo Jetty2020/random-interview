@@ -10,24 +10,29 @@ interface ListCategoryProps {
   categoryClick: (index: number) => () => void;
 }
 
-const ListCategory = ({ selection, categoryClick }: ListCategoryProps) => {
+export const ListCategory = React.memo(function ListCategory({
+  selection,
+  categoryClick,
+}: ListCategoryProps) {
   return (
     <Container>
-      <TitleList>카테고리</TitleList>
-      <ul>
-        {CATEGORIES.map((category, index) => (
-          <Category
-            key={category}
-            category={category}
-            isSelected={selection[index]}
-            isActive={selection.some((isSelected) => isSelected)}
-            handleClick={categoryClick(index)}
-          />
-        ))}
-      </ul>
+      <WrapperSticky>
+        <TitleList>카테고리</TitleList>
+        <ul>
+          {CATEGORIES.map((category, index) => (
+            <Category
+              key={category}
+              category={category}
+              isSelected={selection[index]}
+              isActive={selection.some((isSelected) => isSelected)}
+              handleClick={categoryClick(index)}
+            />
+          ))}
+        </ul>
+      </WrapperSticky>
     </Container>
   );
-};
+});
 
 const Container = styled.div`
   max-width: ${pxToRem(220)};
@@ -35,4 +40,7 @@ const Container = styled.div`
   margin-right: ${pxToRem(50)};
 `;
 
-export default React.memo(ListCategory);
+const WrapperSticky = styled.div`
+  position: sticky;
+  top: ${pxToRem(80)};
+`;

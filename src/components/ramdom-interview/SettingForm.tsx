@@ -1,11 +1,13 @@
+import { nanoid } from 'nanoid';
 import { useForm } from 'react-hook-form';
 import styled from '@emotion/styled';
-import { useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import router from 'next/router';
 import { GRAY_300, PRIMARY_900, RED_300, WHITE } from '@constants/colors';
 import { QUESTIONS } from '@constants/questions';
 import { CATEGORIES } from '@constants/categories';
 import { pxToRem } from '@utils/pxToRem';
+import Media from '@components/Media';
 
 interface FormInputs {
   all: boolean;
@@ -17,7 +19,23 @@ interface FormInputs {
   quizCount: number;
 }
 
+interface IOptionValue {
+  recordMethod: string | undefined;
+  audioInput: string | undefined;
+  videoInput: string | undefined;
+}
+
 export const SettingForm = () => {
+  const audioInputRef = useRef<HTMLSelectElement>(null);
+  const videoInputRef = useRef<HTMLSelectElement>(null);
+  const [audioDevices, setAudioDevices] = useState<MediaDeviceInfo[]>([]);
+  const [videoDevices, setVideoDevices] = useState<MediaDeviceInfo[]>([]);
+  const [optionValue, setOptionValue] = useState<IOptionValue>({
+    recordMethod: undefined,
+    audioInput: undefined,
+    videoInput: undefined,
+  });
+  const { recordMethod, audioInput, videoInput } = optionValue;
   const [errMsg, setErrMsg] = useState('');
   const { register, getValues, setValue, handleSubmit } = useForm<FormInputs>({
     mode: 'onChange',
@@ -59,6 +77,14 @@ export const SettingForm = () => {
     if (errMsg !== '카테고리를 선택해주세요') {
       setErrMsg('');
     }
+  };
+
+  const handleChangeMethod = (e: ChangeEvent<HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setOptionValue({
+      ...optionValue,
+      [name]: value,
+    });
   };
 
   const submitCategory = () => {
@@ -126,11 +152,35 @@ export const SettingForm = () => {
 
       const query = distributedQuizArr.join('_');
       router.push(
-        `random-interview?question=${query}`,
+        {
+          pathname: 'random-interview',
+          query: { question: query, recordMethod, audioInput, videoInput },
+        },
         'random-interview/interviewing',
       );
     }
   };
+
+  const getDevicesList = async () => {
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    const audioDevices = devices.filter(
+      (device) => device.kind === 'audioinput',
+    );
+    const videoDevices = devices.filter(
+      (device) => device.kind === 'videoinput',
+    );
+    setAudioDevices(audioDevices);
+    setVideoDevices(videoDevices);
+    setOptionValue({
+      ...optionValue,
+      audioInput: audioDevices[0].deviceId,
+      videoInput: videoDevices[0].deviceId,
+    });
+  };
+
+  useEffect(() => {
+    getDevicesList();
+  }, []);
 
   return (
     <>
@@ -202,8 +252,71 @@ export const SettingForm = () => {
           />
           개
         </LabelStyled>
+        <RecordMethod htmlFor="recordMethod">
+          기록 방식 &nbsp;
+          <select
+            id="recordMethod"
+            name="recordMethod"
+            value={recordMethod}
+            onChange={handleChangeMethod}
+            aria-label="기록 방식 선택"
+          >
+            <option value="none">없음</option>
+            <option value="audio">녹음</option>
+            <option value="video">영상</option>
+            <option value="full">영상+녹음</option>
+          </select>
+        </RecordMethod>
+        {(recordMethod === 'audio' || recordMethod === 'full') && (
+          <AudioInput htmlFor="audioInput">
+            오디오 &nbsp;
+            <select
+              id="audioInput"
+              name="audioInput"
+              ref={audioInputRef}
+              value={audioInput}
+              onChange={handleChangeMethod}
+              aria-label="오디오 장치 선택"
+            >
+              {audioDevices.map((device) => (
+                <option
+                  value={device.deviceId}
+                  key={`audio-device-${nanoid()}`}
+                >
+                  {device.label}
+                </option>
+              ))}
+            </select>
+          </AudioInput>
+        )}
+        {(recordMethod === 'video' || recordMethod === 'full') && (
+          <VideoInput htmlFor="videoInput">
+            비디오 &nbsp;
+            <select
+              id="videoInput"
+              name="videoInput"
+              ref={videoInputRef}
+              value={videoInput}
+              onChange={handleChangeMethod}
+              aria-label="비디오 장치 선택"
+            >
+              {videoDevices.map((device) => (
+                <option
+                  value={device.deviceId}
+                  key={`video-device-${nanoid()}`}
+                >
+                  {device.label}
+                </option>
+              ))}
+            </select>
+          </VideoInput>
+        )}
         {errMsg ? <TextError>{errMsg}</TextError> : null}
-        <ContainerRecordSetting />
+        {!(recordMethod === 'none' || recordMethod === undefined) && (
+          <ContainerRecordSetting>
+            <Media {...optionValue} isRecording={false} isTest={true} />
+          </ContainerRecordSetting>
+        )}
         <BtnSubmit type="submit" disabled={Boolean(errMsg)}>
           시작하기
         </BtnSubmit>
@@ -218,7 +331,8 @@ export const SettingForm = () => {
 
 const Form = styled.form`
   display: grid;
-  grid-template-columns: repeat(6, 2fr) 3fr;
+  grid-template-columns: repeat(6, 1fr) 2fr;
+  gap: ${pxToRem(20)} 0;
   text-align: center;
   margin: ${pxToRem(60)} auto 0;
   padding: ${pxToRem(35)} ${pxToRem(60)};
@@ -240,7 +354,7 @@ const InputCount = styled.input`
 `;
 
 const TextError = styled.p`
-  grid-column: 1 / span 7;
+  grid-column: 1 / span 8;
   text-align: center;
   margin: ${pxToRem(-20)} 0 ${pxToRem(20)};
   font-size: ${pxToRem(13)};
@@ -248,7 +362,7 @@ const TextError = styled.p`
 `;
 
 const BtnSubmit = styled.button`
-  grid-column: 1 / span 7;
+  grid-column: 1 / span 8;
   width: ${pxToRem(200)};
   height: ${pxToRem(36)};
   margin: 0 auto;
@@ -270,9 +384,19 @@ const Notice = styled.div`
   text-align: center;
 `;
 
+const RecordMethod = styled.label`
+  grid-column: 1/3;
+`;
+
+const AudioInput = styled.label`
+  grid-column: span 3;
+`;
+
+const VideoInput = styled.label`
+  grid-column: span 3;
+`;
+
 const ContainerRecordSetting = styled.div`
   grid-column: 1 / span 7;
-  width: 100%;
-  height: 50vh;
-  background-color: #eee;
+  margin: 0 auto;
 `;

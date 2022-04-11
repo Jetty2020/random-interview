@@ -10,7 +10,7 @@ function HeaderPage() {
         <Link href="/">
           <a>
             <span className="sr-only">로고이름</span>
-            <ImgLogo alt="로고이름" src="/fonts/산돌스웨거Text2.png" />
+            <ImgLogo alt="로고이름" src="/fonts/면대면Text.png" />
           </a>
         </Link>
         <ListMenu>
@@ -44,8 +44,8 @@ const HeaderBar = styled.div`
 
 const ImgLogo = styled.img`
   display: inline-block;
-  width: ${pxToRem(150)};
-  padding: ${pxToRem(5)} 0;
+  width: ${pxToRem(80)};
+  padding: ${pxToRem(20)} 0;
   vertical-align: text-bottom;
 `;
 

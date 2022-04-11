@@ -1,5 +1,4 @@
 import React from 'react';
-import FooterPage from './FooterPage';
 import HeaderPage from './HeaderPage';
 
 interface ChildProps {
@@ -10,7 +9,6 @@ function Layout({ children }: ChildProps) {
     <>
       <HeaderPage />
       <main>{children}</main>
-      {/* <FooterPage /> */}
     </>
   );
 }

@@ -76,7 +76,7 @@ export const QuestionList = () => {
 
   return (
     <>
-      <ButtonContainer>
+      <ContainerButton>
         <Link href="/random-interview">
           <Button as="a">처음으로</Button>
         </Link>
@@ -85,7 +85,7 @@ export const QuestionList = () => {
             음성/영상 저장
           </Button>
         )}
-      </ButtonContainer>
+      </ContainerButton>
       <ContainerUL>
         {questionArr.map((e) =>
           e.map(
@@ -115,7 +115,7 @@ export const QuestionList = () => {
   );
 };
 
-const ButtonContainer = styled.div`
+const ContainerButton = styled.div`
   display: flex;
   justify-content: flex-end;
   align-items: center;

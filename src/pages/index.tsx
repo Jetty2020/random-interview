@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import PageTitle from '@components/common/PageTitle';
-import { LandingSection, ListPage, InterviewPage } from '@components/landing';
+import { LandingSection } from '@components/landing';
 import { PRIMARY_100, PRIMARY_200, WHITE } from '@constants/colors';
 
 const Home: NextPage = () => {

@@ -12,16 +12,16 @@ interface quizProps {
 }
 export const Quiz = ({ question, answer }: quizProps) => {
   return (
-    <WrapQuize>
+    <WrapQuiz>
       <QuestionMark>Q.</QuestionMark>
       <Text>{question}</Text>
       <br />
       <AnswerMark>A.</AnswerMark>
       <Text>{answer}</Text>
-    </WrapQuize>
+    </WrapQuiz>
   );
 };
 
-const WrapQuize = styled.div`
+const WrapQuiz = styled.div`
   margin: ${pxToRem(50)} ${pxToRem(40)};
 `;

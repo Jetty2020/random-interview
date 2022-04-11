@@ -11,10 +11,8 @@ interface quizProps {
   answer: string;
 }
 export const Quiz = ({ question, answer }: quizProps) => {
-  console.log(question, answer);
   return (
     <WrapQuize>
-      {/* <CategoryMark>{category}</CategoryMark> */}
       <QuestionMark>Q.</QuestionMark>
       <Text>{question}</Text>
       <br />

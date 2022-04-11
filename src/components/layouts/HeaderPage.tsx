@@ -25,10 +25,10 @@ function HeaderPage() {
 }
 
 const Header = styled.header`
-  width: 100%;
   position: sticky;
   top: 0;
   z-index: 30;
+  width: 100%;
   border-bottom: 1px solid #ddd;
   background-color: ${WHITE};
 `;
@@ -44,9 +44,8 @@ const HeaderBar = styled.div`
 
 const ImgLogo = styled.img`
   display: inline-block;
-  padding: ${pxToRem(5)} 0;
   width: ${pxToRem(150)};
-
+  padding: ${pxToRem(5)} 0;
   vertical-align: text-bottom;
 `;
 

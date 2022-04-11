@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { css } from '@emotion/react';
 import React from 'react';
 import { GRAY_100, PRIMARY_800, WHITE } from '@constants/colors';
 import { pxToRem } from '@utils/pxToRem';
@@ -19,12 +20,13 @@ const TitleList = ({ sticky, children }: TitleListProps) => {
 const Title = styled.p<TitleProps>`
   ${({ sticky }) =>
     sticky &&
-    `
-    position: sticky;
-    top: ${pxToRem(80)};
+    css`
+      position: sticky;
+      top: ${pxToRem(80)};
     `}
+  z-index: 20;
   box-sizing: border-box;
-  padding: ${pxToRem(27)} 0 ${pxToRem(27)} ${pxToRem(20)};
+  padding: ${pxToRem(27, 0, 27, 20)};
   margin-bottom: ${pxToRem(20)};
   border-bottom: ${pxToRem(2)} solid ${GRAY_100};
   background-color: ${WHITE};

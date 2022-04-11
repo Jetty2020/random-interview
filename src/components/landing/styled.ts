@@ -27,13 +27,13 @@ export const SectionPage = styled.section<SetctionProps>`
 
 export const ContainerIntro = styled.div<ContainerIntroProps>`
   flex-basis: 40%;
+  display: flex;
+  align-items: center;
+  ${(props) => props.flexEnd && 'justify-content:end'};
   position: relative;
   min-width: ${pxToRem(1140)};
   height: ${pxToRem(760)};
   margin: 0 auto;
-  display: flex;
-  align-items: center;
-  ${(props) => props.flexEnd && 'justify-content:end'};
 `;
 
 export const ContainerText = styled.div`
@@ -41,14 +41,14 @@ export const ContainerText = styled.div`
 `;
 
 export const HeaderLogo = styled.h2`
+  margin-bottom: ${pxToRem(30)};
   font-size: ${pxToRem(45)};
   font-weight: 900;
-  margin-bottom: ${pxToRem(30)};
 `;
 
 export const TextIntro = styled.p`
-  font-weight: 600;
   margin-bottom: ${pxToRem(30)};
+  font-weight: 600;
   line-height: ${pxToRem(24)};
 `;
 
@@ -56,13 +56,13 @@ export const AnchorBtn = styled.a<LinkButtonProps>`
   display: inline-block;
   width: ${pxToRem(170)};
   height: ${pxToRem(50)};
+  border-radius: ${pxToRem(25)};
+  background: ${(props) => props.backgroundColor};
   line-height: ${pxToRem(50)};
   font-family: 'NotoSanskr_Medium';
   color: ${(props) => props.color};
   font-weight: bold;
   text-align: center;
-  border-radius: ${pxToRem(25)};
-  background: ${(props) => props.backgroundColor};
 
   &::after {
     content: '☝';
@@ -76,8 +76,8 @@ export const AnchorBtn = styled.a<LinkButtonProps>`
 
 export const ImgIntro = styled.img<ImgIntroProps>`
   position: absolute;
+  ${(props) => (props.left ? 'left:0 ' : 'right:0')};
   width: ${pxToRem(600)};
   height: ${pxToRem(600)};
-  ${(props) => (props.left ? 'left:0 ' : 'right:0')};
   bottom: 0;
 `;

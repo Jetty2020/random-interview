@@ -16,6 +16,11 @@ interface CategoryProps {
   handleClick: () => void;
 }
 
+interface ButtonProps {
+  isSelected: boolean;
+  isActive: boolean;
+}
+
 const Category = ({
   category,
   isSelected,
@@ -30,11 +35,6 @@ const Category = ({
     </Item>
   );
 };
-
-interface ButtonProps {
-  isSelected: boolean;
-  isActive: boolean;
-}
 
 const Item = styled.li`
   height: ${pxToRem(60)};
@@ -58,7 +58,9 @@ const Button = styled.button<ButtonProps>`
     }
     return 1;
   }};
-  transition: opacity 0.2s;
+  transition: opacity 0.2s,
+    font-size 0.1s
+      ${({ isSelected }) => isSelected && ', background-color 0.3s'};
 
   &::after {
     content: '';
@@ -67,8 +69,8 @@ const Button = styled.button<ButtonProps>`
     bottom: 0;
     right: 0;
     width: 0;
-    border-left: 12px solid transparent;
-    border-bottom: 12px solid ${WHITE};
+    border-left: ${pxToRem(12)} solid transparent;
+    border-bottom: ${pxToRem(12)} solid ${WHITE};
   }
 
   &:hover {

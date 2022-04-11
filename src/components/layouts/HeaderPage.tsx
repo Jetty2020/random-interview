@@ -10,7 +10,7 @@ function HeaderPage() {
         <Link href="/">
           <a>
             <span className="sr-only">로고이름</span>
-            <ImgLogo alt="로고이름" src="/fonts/산돌스웨거Text2.png" />
+            <ImgLogo alt="로고이름" src="/fonts/면대면Text.png" />
           </a>
         </Link>
         <ListMenu>
@@ -25,10 +25,10 @@ function HeaderPage() {
 }
 
 const Header = styled.header`
-  width: 100%;
   position: sticky;
   top: 0;
-  z-index: 1;
+  z-index: 30;
+  width: 100%;
   border-bottom: 1px solid #ddd;
   background-color: ${WHITE};
 `;
@@ -44,9 +44,8 @@ const HeaderBar = styled.div`
 
 const ImgLogo = styled.img`
   display: inline-block;
-  padding: ${pxToRem(5)} 0;
-  width: ${pxToRem(150)};
-
+  width: ${pxToRem(80)};
+  padding: ${pxToRem(20)} 0;
   vertical-align: text-bottom;
 `;
 

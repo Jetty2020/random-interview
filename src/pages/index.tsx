@@ -27,9 +27,10 @@ const Home: NextPage = () => {
         header="질문 리스트"
         pageBackground={WHITE}
         btnBackground={PRIMARY_200}
+        btn
         btnEmoji="☝"
         btnText="체험하기"
-        href="/"
+        href="/list"
         imageSrc="https://d1unjqcospf8gs.cloudfront.net/assets/home/main/3x/image-top-68ba12f0da7b5af9a574ed92ca8b3a9c0068db176b566dd374ee50359693358b.png"
         flexEnd
         left
@@ -42,9 +43,10 @@ const Home: NextPage = () => {
         header="면접 플레잉"
         pageBackground={PRIMARY_100}
         btnBackground={WHITE}
+        btn
         btnEmoji="☝"
         btnText="체험하기"
-        href="/"
+        href="/random-interview"
         imageSrc="https://d1unjqcospf8gs.cloudfront.net/assets/home/main/3x/image-top-68ba12f0da7b5af9a574ed92ca8b3a9c0068db176b566dd374ee50359693358b.png"
       >
         랜덤 인터뷰를 풀 때 제공되는 녹화 기능을 이용해서 <br />

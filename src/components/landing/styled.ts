@@ -63,6 +63,7 @@ export const AnchorBtn = styled.a<LinkButtonProps>`
   color: ${(props) => props.color};
   font-weight: bold;
   text-align: center;
+  cursor: pointer;
 
   &::after {
     content: '☝';

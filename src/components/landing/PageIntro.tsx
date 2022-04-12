@@ -5,6 +5,7 @@ interface SectionProps {
   header: string;
   pageBackground: string;
   btnBackground: string;
+  btn?: boolean;
   btnEmoji: string;
   btnText: string;
   href: string;
@@ -18,6 +19,7 @@ export function LandingSection({
   header,
   pageBackground,
   btnBackground,
+  btn,
   btnEmoji,
   btnText,
   href,
@@ -32,15 +34,17 @@ export function LandingSection({
         <Styled.ContainerText>
           <Styled.HeaderLogo>{header}</Styled.HeaderLogo>
           <Styled.TextIntro>{children}</Styled.TextIntro>
-          <Link href={href}>
-            <Styled.AnchorBtn
-              backgroundColor={btnBackground}
-              color="#444"
-              content={btnEmoji}
-            >
-              {btnText}
-            </Styled.AnchorBtn>
-          </Link>
+          {btn && (
+            <Link href={href}>
+              <Styled.AnchorBtn
+                backgroundColor={btnBackground}
+                color="#444"
+                content={btnEmoji}
+              >
+                {btnText}
+              </Styled.AnchorBtn>
+            </Link>
+          )}
         </Styled.ContainerText>
         <Styled.ImgIntro src={imageSrc} left={left} />
       </Styled.ContainerIntro>
@@ -51,4 +55,5 @@ export function LandingSection({
 LandingSection.defaultProps = {
   flexEnd: false,
   left: false,
+  btn: false,
 };

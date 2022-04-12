@@ -27,6 +27,7 @@ const Home: NextPage = () => {
         header="질문 리스트"
         pageBackground={WHITE}
         btnBackground={PRIMARY_200}
+        btn
         btnEmoji="☝"
         btnText="체험하기"
         href="/list"
@@ -42,6 +43,7 @@ const Home: NextPage = () => {
         header="면접 플레잉"
         pageBackground={PRIMARY_100}
         btnBackground={WHITE}
+        btn
         btnEmoji="☝"
         btnText="체험하기"
         href="/random-interview"

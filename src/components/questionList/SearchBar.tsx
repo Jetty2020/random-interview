@@ -69,7 +69,7 @@ export const SearchBar = React.memo(function SearchBar({
 const Container = styled.form`
   position: relative;
   height: ${pxToRem(50)};
-  padding: 0 ${pxToRem(30)};
+  padding: ${pxToRem(0, 30)};
   margin-bottom: ${pxToRem(40)};
 `;
 
@@ -83,7 +83,7 @@ const Icon = styled(IconSearch)`
 
 const Input = styled.input`
   width: 100%;
-  padding: 0 0 ${pxToRem(16)} ${pxToRem(50)};
+  padding: ${pxToRem(0, 0, 16, 50)};
   border: none;
   border-bottom: ${pxToRem(1)} solid ${GRAY_300};
   font-size: ${pxToRem(32)};

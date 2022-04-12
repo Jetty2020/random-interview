@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
-import React, { useCallback, useState } from 'react';
+import { Keyframes, keyframes } from '@emotion/react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   PRIMARY_400,
   PRIMARY_500,
@@ -14,38 +15,74 @@ interface QuestionProps {
   answer: string;
 }
 
+interface QuestionButtonProps {
+  isOpened: boolean;
+}
+
+interface AnswerButtonProps {
+  animation: Keyframes | null;
+}
+
 const Question = ({ question, answer }: QuestionProps) => {
   const [isOpened, setIsOpened] = useState<boolean>(false);
+  const [animation, setAnimation] = useState<Keyframes | null>(null);
 
-  const handleClick = useCallback(() => {
-    setIsOpened((state) => !state);
-  }, []);
+  const handleQuestionClick = useCallback(() => {
+    if (isOpened) {
+      setAnimation(fadeOut);
+    } else {
+      setAnimation(fadeIn);
+    }
+  }, [isOpened, animation]);
+
+  const handleAnswerClick = () => {
+    setAnimation(fadeOut);
+  };
+
+  const handleAnimationEnd = () => {
+    if (animation === fadeOut) {
+      setIsOpened(false);
+      setAnimation(null);
+    }
+  };
+
+  useEffect(() => {
+    if (!isOpened && animation) {
+      setIsOpened(true);
+    }
+  }, [animation]);
 
   return (
     <Item>
-      <ButtonQuestion onClick={handleClick} isOpened={isOpened}>
+      <ButtonQuestion isOpened={isOpened} onClick={handleQuestionClick}>
         <QuestionMark>Q.</QuestionMark>
         <Text>{question}</Text>
       </ButtonQuestion>
-      <ButtonAnswer onClick={handleClick} isOpened={isOpened}>
-        <AnswerMark>A.</AnswerMark>
-        <Text>{answer}</Text>
-      </ButtonAnswer>
+      {isOpened && (
+        <ButtonAnswer
+          animation={animation}
+          onClick={handleAnswerClick}
+          onAnimationEnd={handleAnimationEnd}
+        >
+          <AnswerMark>A.</AnswerMark>
+          <Text>{answer}</Text>
+        </ButtonAnswer>
+      )}
     </Item>
   );
 };
 
-interface ButtonProps {
-  isOpened: boolean;
-}
-
 const Item = styled.li`
+  overflow: hidden;
   margin: 0 auto;
+  word-break: break-all;
 `;
 
-const ButtonQuestion = styled.button<ButtonProps>`
+const ButtonQuestion = styled.button<QuestionButtonProps>`
   display: inline-flex;
   align-items: center;
+  position: relative;
+  z-index: 10;
   width: 100%;
   min-height: ${pxToRem(60)};
   padding: ${pxToRem(10)};
@@ -74,8 +111,8 @@ export const Text = styled.span`
   font-size: ${pxToRem(20)};
 `;
 
-const ButtonAnswer = styled.button<ButtonProps>`
-  display: ${({ isOpened }) => (isOpened ? 'inline-flex' : 'none')};
+const ButtonAnswer = styled.button<AnswerButtonProps>`
+  display: inline-flex;
   align-items: center;
   width: 100%;
   min-height: ${pxToRem(60)};
@@ -85,6 +122,7 @@ const ButtonAnswer = styled.button<ButtonProps>`
   text-align: left;
   box-sizing: border-box;
   transition: border 0.2s 0.05s;
+  animation: ${({ animation }) => animation} 0.4s;
 
   &:hover {
     border-left: ${pxToRem(4)} solid ${SECONDARY_500};
@@ -96,6 +134,28 @@ export const AnswerMark = styled.span`
   font-weight: 700;
   font-size: ${pxToRem(36)};
   color: ${SECONDARY_400};
+`;
+
+const fadeIn = keyframes`
+  0% {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
+const fadeOut = keyframes`
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
 `;
 
 export default React.memo(Question);

@@ -3,7 +3,13 @@ import { useForm } from 'react-hook-form';
 import styled from '@emotion/styled';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import router from 'next/router';
-import { GRAY_300, PRIMARY_900, RED_300, WHITE } from '@constants/colors';
+import {
+  ERROR,
+  GRAY_300,
+  PRIMARY_900,
+  RED_300,
+  WHITE,
+} from '@constants/colors';
 import { QUESTIONS } from '@constants/questions';
 import { CATEGORIES } from '@constants/categories';
 import { pxToRem } from '@utils/pxToRem';
@@ -163,19 +169,21 @@ export const SettingForm = () => {
 
   const getDevicesList = async () => {
     const devices = await navigator.mediaDevices.enumerateDevices();
-    const audioDevices = devices.filter(
-      (device) => device.kind === 'audioinput',
-    );
-    const videoDevices = devices.filter(
-      (device) => device.kind === 'videoinput',
-    );
-    setAudioDevices(audioDevices);
-    setVideoDevices(videoDevices);
-    setOptionValue({
-      ...optionValue,
-      audioInput: audioDevices[0].deviceId,
-      videoInput: videoDevices[0].deviceId,
-    });
+    if (devices) {
+      const audioDevices = devices.filter(
+        (device) => device.kind === 'audioinput',
+      );
+      const videoDevices = devices.filter(
+        (device) => device.kind === 'videoinput',
+      );
+      setAudioDevices(audioDevices);
+      setVideoDevices(videoDevices);
+      setOptionValue({
+        ...optionValue,
+        audioInput: audioDevices[0]?.deviceId,
+        videoInput: videoDevices[0]?.deviceId,
+      });
+    }
   };
 
   useEffect(() => {
@@ -262,9 +270,11 @@ export const SettingForm = () => {
             aria-label="기록 방식 선택"
           >
             <option value="none">없음</option>
-            <option value="audio">녹음</option>
-            <option value="video">영상</option>
-            <option value="full">영상+녹음</option>
+            {audioDevices.length !== 0 && <option value="audio">녹음</option>}
+            {videoDevices.length !== 0 && <option value="video">영상</option>}
+            {audioDevices.length !== 0 && videoDevices.length !== 0 && (
+              <option value="full">녹음+영상</option>
+            )}
           </select>
         </RecordMethod>
         {(recordMethod === 'audio' || recordMethod === 'full') && (
@@ -310,6 +320,15 @@ export const SettingForm = () => {
               ))}
             </select>
           </VideoInput>
+        )}
+        {audioDevices.length === 0 && videoDevices.length !== 0 && (
+          <MsgDeviceErr>마이크가 없어 녹음이 불가합니다.</MsgDeviceErr>
+        )}
+        {audioDevices.length !== 0 && videoDevices.length === 0 && (
+          <MsgDeviceErr>카메라가 없어 녹화가 불가합니다.</MsgDeviceErr>
+        )}
+        {audioDevices.length === 0 && videoDevices.length === 0 && (
+          <MsgDeviceErr>장치가 없어 녹음/녹화가 불가합니다.</MsgDeviceErr>
         )}
         {errMsg ? <TextError>{errMsg}</TextError> : null}
         {!(recordMethod === 'none' || recordMethod === undefined) && (
@@ -399,4 +418,11 @@ const VideoInput = styled.label`
 const ContainerRecordSetting = styled.div`
   grid-column: 1 / span 7;
   margin: 0 auto;
+`;
+
+const MsgDeviceErr = styled.p`
+  grid-column: span 2;
+  line-height: ${pxToRem(19)};
+  color: ${ERROR};
+  vertical-align: middle;
 `;

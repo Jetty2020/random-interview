@@ -14,10 +14,12 @@ function HeaderPage() {
           </a>
         </Link>
         <ListMenu>
-          <ItemMenu>상세정보</ItemMenu>
-          <ItemMenu>링크1</ItemMenu>
-          <ItemMenu>링크2</ItemMenu>
-          <ItemMenu>링크3</ItemMenu>
+          <Link href="/list">
+            <ItemMenu>질문 리스트</ItemMenu>
+          </Link>
+          <Link href="/random-interview">
+            <ItemMenu>면접 플레잉</ItemMenu>
+          </Link>
         </ListMenu>
       </HeaderBar>
     </Header>
@@ -60,6 +62,8 @@ const ItemMenu = styled.li`
   color: #757575;
   font-size: ${pxToRem(15)};
   font-weight: 700;
+  cursor: pointer;
+
   &:not(:first-of-type) {
     &::before {
       position: absolute;

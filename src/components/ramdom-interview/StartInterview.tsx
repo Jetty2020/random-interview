@@ -1,9 +1,11 @@
 import styled from '@emotion/styled';
 import router from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
-import { GRAY_400, PRIMARY_200, PRIMARY_900, WHITE } from '@constants/colors';
+import Media from '@components/Media';
+import { PRIMARY_200, PRIMARY_900, WHITE } from '@constants/colors';
 import { CATEGORIES } from '@constants/categories';
 import { QUESTIONS } from '@constants/questions';
+import { pxToRem } from '@utils/pxToRem';
 
 const selectIndex = (totalIndex: number, selectingNumber: number) => {
   const randomIndexArray = [];
@@ -18,10 +20,17 @@ const selectIndex = (totalIndex: number, selectingNumber: number) => {
   return randomIndexArray;
 };
 
+interface IStarInterviewProps {
+  question: string;
+  recordMethod: string;
+  audioInput: string;
+  videoInput: string;
+}
+
 export const StartInterview = () => {
-  const { question } = router.query;
+  const { question, recordMethod, audioInput, videoInput } =
+    router.query as unknown as IStarInterviewProps;
   const [questionIndexArr, setQuestionIndexArr] = useState<number[][]>([[]]);
-  console.log('question', question);
   const [questionContent, setQuestionContent] = useState([0, 0]);
 
   const questionQueryArr =
@@ -31,8 +40,6 @@ export const StartInterview = () => {
       .map((ele) => +ele) || [];
 
   const firstStartCategory = questionQueryArr.findIndex((e) => e !== 0);
-  console.log(`firstStartCategory ${firstStartCategory}`);
-  console.log('questionQueryArr', questionQueryArr);
   const [progressArr, setProgressArr] = useState(
     Array(questionQueryArr.length)
       .fill(0)
@@ -60,15 +67,19 @@ export const StartInterview = () => {
     );
   }, []);
 
+  const handelQuit = () => {
+    const newArr = questionIndexArr.map((ele) => ele.join('*')).join('-');
+    router.push(
+      {
+        pathname: 'random-interview',
+        query: { 'question-list': newArr, recordMethod },
+      },
+      'random-interview/question-list',
+    );
+  };
+
   const handleNextQuestion = () => {
     if (
-      questionQueryArr[questionContent[0]] ===
-        progressArr[questionContent[0]] &&
-      questionQueryArr.length - 1 === questionContent[0]
-    ) {
-      const newArr = questionIndexArr.map((ele) => ele.join('*')).join('-');
-      router.push(`/random-interview?question-list=${newArr}`);
-    } else if (
       questionQueryArr[questionContent[0]] === progressArr[questionContent[0]]
     ) {
       let check = 1;
@@ -92,7 +103,7 @@ export const StartInterview = () => {
   };
 
   return (
-    <Container>
+    <Section>
       <ListQuestionNum>
         {CATEGORIES.map((ele, idx) => {
           if (questionQueryArr[idx]) {
@@ -108,7 +119,7 @@ export const StartInterview = () => {
           return null;
         })}
       </ListQuestionNum>
-      <Container>
+      <ContainerInterview>
         <ContentQuestion>
           {
             QUESTIONS.filter(
@@ -117,26 +128,43 @@ export const StartInterview = () => {
               ?.question
           }
         </ContentQuestion>
-        <Video />
-      </Container>
-      <BtnContainer>
-        <Btn type="button">종료하기</Btn>
-        <Btn type="button" onClick={handleNextQuestion}>
+        {recordMethod && (
+          <ContainerMedia>
+            <Media
+              isTest={false}
+              isRecording={true}
+              recordMethod={recordMethod}
+              audioInput={audioInput}
+              videoInput={videoInput}
+            />
+          </ContainerMedia>
+        )}
+      </ContainerInterview>
+      <ContainerBtn>
+        <Btn type="button" onClick={handelQuit}>
           {questionQueryArr[questionContent[0]] ===
             progressArr[questionContent[0]] &&
           questionQueryArr.length - 1 === questionContent[0]
             ? '질문 리스트 보기'
-            : '다음 질문'}
+            : '종료하기'}
         </Btn>
-      </BtnContainer>
-    </Container>
+        {questionQueryArr[questionContent[0]] ===
+          progressArr[questionContent[0]] &&
+        questionQueryArr.length - 1 === questionContent[0] ? null : (
+          <Btn type="button" onClick={handleNextQuestion}>
+            다음 질문
+          </Btn>
+        )}
+      </ContainerBtn>
+    </Section>
   );
 };
 
-const Container = styled.section`
+const Section = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: ${pxToRem(35)};
 `;
 
 const ListQuestionNum = styled.ul`
@@ -149,48 +177,52 @@ const ItemQuestionNum = styled.li`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 67px;
-  height: 55px;
+  width: ${pxToRem(67)};
+  height: ${pxToRem(55)};
   background-color: ${PRIMARY_200};
-  border-radius: 15px;
+  border-radius: ${pxToRem(15)};
 
   & + & {
-    margin-left: 15px;
+    margin-left: ${pxToRem(15)};
   }
 `;
+
+const ContainerInterview = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
 const TitleCategory = styled.span`
-  font-size: 17px;
+  font-size: ${pxToRem(17)};
   font-weight: 500;
   margin-bottom: 3px;
 `;
 
 const ContentQuestion = styled.p`
-  font-size: 20px;
+  font-size: ${pxToRem(20)};
   text-align: center;
-  margin-top: 40px;
+  margin-top: ${pxToRem(40)};
 `;
 
-const Video = styled.div`
-  width: 500px;
-  height: 400px;
-  background-color: ${GRAY_400};
-  margin-top: 40px;
+const ContainerMedia = styled.div`
+  margin-top: ${pxToRem(40)};
 `;
 
 const Btn = styled.button`
-  width: 160px;
-  height: 36px;
+  width: ${pxToRem(160)};
+  height: ${pxToRem(36)};
   margin: 0 auto;
   background-color: ${PRIMARY_900};
-  font-size: 18px;
+  font-size: ${pxToRem(18)};
   font-weight: 500;
   line-height: 1.6;
   color: ${WHITE};
   border-radius: 10px;
 `;
 
-const BtnContainer = styled.div`
+const ContainerBtn = styled.div`
   display: flex;
-  width: 500px;
-  margin-top: 50px;
+  width: ${pxToRem(500)};
+  margin-top: ${pxToRem(50)};
 `;

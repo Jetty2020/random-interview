@@ -99,8 +99,7 @@ const ButtonQuestion = styled.button<QuestionButtonProps>`
   }
 `;
 
-const QuestionMark = styled.span`
-  align-self: flex-start;
+export const QuestionMark = styled.span`
   padding-right: ${pxToRem(10)};
   font-weight: 700;
   font-size: ${pxToRem(36)};
@@ -130,8 +129,7 @@ const ButtonAnswer = styled.button<AnswerButtonProps>`
   }
 `;
 
-const AnswerMark = styled.span`
-  align-self: flex-start;
+export const AnswerMark = styled.span`
   padding-right: ${pxToRem(10)};
   font-weight: 700;
   font-size: ${pxToRem(36)};

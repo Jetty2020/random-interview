@@ -1,7 +1,9 @@
-import { useRouter } from 'next/router';
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import styled from '@emotion/styled';
+import { keyframes } from '@emotion/react';
+import React, { useEffect, useRef } from 'react';
+import { pxToRem } from '@utils/pxToRem';
 import Guideline from '@assets/icon/guideline.svg';
-import * as Styled from './styled';
+import { ERROR } from '@constants/colors';
 
 interface IMediaProps {
   recordMethod: string | undefined;
@@ -9,7 +11,6 @@ interface IMediaProps {
   videoInput: string | undefined;
   isRecording: boolean;
   isTest: boolean;
-  setDownloadLink?: Dispatch<SetStateAction<string>>;
 }
 
 const Media = ({
@@ -18,21 +19,12 @@ const Media = ({
   videoInput,
   isRecording,
   isTest,
-  setDownloadLink,
 }: IMediaProps) => {
-  console.log('props로 받은 recordMethod:', recordMethod);
-  const audioRef = useRef<HTMLAudioElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const meterRef = useRef<HTMLMeterElement>(null);
-  // const chunk = useRef<BlobPart[]>([]);
-  // const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder>();
-  // const [mediaStream, setMediaStream] = useState<MediaStream>(
-  //   null as unknown as MediaStream,
-  // );
   const recordedBlob: BlobPart[] = [];
-  let mediaRecorder: MediaRecorder;
-  let mediaStream: MediaStream | null = null;
-  console.log('컴포넌트 실행 시 mediaStream', mediaStream);
+  const MIME_TYPE =
+    recordMethod === 'audio' ? 'audio/webm;codecs=opus' : 'video/webm';
   const CONSTRAINTS = {
     video:
       recordMethod === 'video' || recordMethod === 'full'
@@ -43,13 +35,24 @@ const Media = ({
         ? { deviceId: audioInput }
         : false,
   };
+  let mediaRecorder: MediaRecorder;
+  let mediaStream: MediaStream | null = null;
+  let rafId = 0;
 
-  // 기록 시작
   const startRecording = (mediaStream: MediaStream) => {
-    localStorage.removeItem('recorded-interview');
-    // const MEDIA_TYPE = recordMethod === 'audio' ? 'audio/mp4' : 'video/mp4';
+    if (indexedDB) {
+      const request = indexedDB.open('random-interview');
+      request.onupgradeneeded = () => {
+        const db = request.result;
+        db.createObjectStore('recordings');
+      };
+      request.onerror = (e) => {
+        console.error(e);
+      };
+    }
+
     mediaRecorder = new MediaRecorder(mediaStream);
-    if (mediaRecorder) {
+    if (mediaRecorder && recordedBlob.length === 0) {
       mediaRecorder.ondataavailable = (e) => {
         recordedBlob.push(e.data);
       };
@@ -57,87 +60,57 @@ const Media = ({
     }
   };
 
-  // 기록 저장
-  const saveRecording = async () => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const audioBlob = e.target.result;
-      window.localStorage.setItem(
-        'recorded-interview',
-        JSON.stringify(audioBlob),
-      );
+  const saveRecording = () => {
+    const mergedBlob = new Blob(recordedBlob, { type: MIME_TYPE });
+    const request = indexedDB.open('random-interview');
+    request.onsuccess = () => {
+      const db = request.result;
+      const transaction = db.transaction(['recordings'], 'readwrite');
+      const objectStore = transaction.objectStore('recordings');
+      objectStore.add(mergedBlob, 'index');
     };
-    reader.readAsDataURL(audioBlob);
   };
 
-  // 기록 중지
   const stopRecording = () => {
-    // const MEDIA_TYPE = recordMethod === 'audio' ? 'audio/mp4' : 'video/mp4';
     if (mediaRecorder) {
-      // mediaRecorder.pause();
       mediaRecorder.stop();
-    }
-    if (isRecording) {
-      saveRecording();
+      setTimeout(() => {
+        saveRecording();
+      }, 0);
     }
   };
 
-  // 시각화
   const DecibelMeter = (mediaStream: MediaStream) => {
     const audioContext = new AudioContext();
     const analyser = audioContext.createAnalyser();
     const mediaStreamSource = audioContext.createMediaStreamSource(mediaStream);
-    const unit8Array = new Uint8Array(analyser.frequencyBinCount);
+    const uint8Array = new Uint8Array(analyser.frequencyBinCount);
     mediaStreamSource.connect(analyser);
 
     const visualize = () => {
-      // console.log('시각화 단계의 mediaStream', mediaStream);
-      analyser.getByteFrequencyData(unit8Array);
-      const decibel = Math.floor((Math.max(...unit8Array) / 255) * 100);
-      // let rafId = 0;
+      analyser.getByteFrequencyData(uint8Array);
+      const decibel = Math.floor((Math.max(...uint8Array) / 255) * 100);
       if (meterRef && meterRef.current) {
         meterRef.current.value = decibel;
       }
-      if (recordMethod === 'audio') {
-        // console.log(recordMethod);
-        // console.log('시각화 시작');
-        requestAnimationFrame(visualize);
-      } else {
-        console.log('audioContext 종료');
-        audioContext.close();
-        // cancelAnimationFrame(rafId);
-        if (meterRef && meterRef.current) {
-          meterRef.current.value = 0;
-        }
-      }
+      rafId = requestAnimationFrame(visualize);
     };
-
-    if (recordMethod === 'audio' || recordMethod === 'full') {
-      console.log('DecibelMeter의 recordMethod', recordMethod);
-      visualize();
-    }
+    visualize();
   };
 
-  // 미디어 시작
   const startMedia = async (CONSTRAINTS: MediaStreamConstraints) => {
     try {
       mediaStream = await navigator.mediaDevices.getUserMedia(CONSTRAINTS);
-      console.log('media 시작 시 mediaStream', mediaStream);
-      if (recordMethod === 'audio') {
-        if (audioRef && audioRef.current) {
-          const $audio = audioRef.current;
-          $audio.srcObject = mediaStream;
-          $audio.play();
-        }
-      } else if (recordMethod === 'video' || recordMethod === 'full') {
+      if (recordMethod === 'video' || recordMethod === 'full') {
         if (videoRef && videoRef.current) {
           const $video = videoRef.current;
           $video.srcObject = mediaStream;
           $video.play();
         }
       }
-      DecibelMeter(mediaStream);
-
+      if (recordMethod !== 'video') {
+        DecibelMeter(mediaStream);
+      }
       if (isRecording) {
         startRecording(mediaStream);
       }
@@ -146,25 +119,20 @@ const Media = ({
     }
   };
 
-  // 미디어 중지
   const stopMedia = () => {
     if (mediaStream) {
-      console.log('미디어스트림 중지');
       mediaStream.getTracks().forEach((track) => {
-        console.log(track);
         track.stop();
       });
       mediaStream = null;
-      console.log('중지 후', mediaStream);
     }
   };
 
   useEffect(() => {
-    console.log('Media 컴포넌트 마운트');
     startMedia(CONSTRAINTS);
     return () => {
-      console.log('Media 컴포넌트 언마운트');
       stopMedia();
+      cancelAnimationFrame(rafId);
       if (isRecording) {
         stopRecording();
       }
@@ -174,7 +142,7 @@ const Media = ({
   return (
     <section>
       {(recordMethod === 'audio' || recordMethod === 'full') && isTest && (
-        <Styled.Decibel
+        <Decibel
           ref={meterRef}
           min={0}
           low={30}
@@ -184,21 +152,82 @@ const Media = ({
         />
       )}
       {recordMethod !== 'audio' && (
-        <Styled.VideoContainer>
-          <Styled.Video ref={videoRef} muted />
+        <ContainerVideo>
+          <Video ref={videoRef} muted />
           {isTest && (
-            <Styled.Guideline>
+            <ContainerGuideline>
               <Guideline />
-            </Styled.Guideline>
+            </ContainerGuideline>
           )}
-        </Styled.VideoContainer>
+        </ContainerVideo>
+      )}
+      {recordMethod === 'audio' && !isTest && (
+        <RecordingNotice>
+          <Pulse />
+          <span>REC</span>
+        </RecordingNotice>
       )}
     </section>
   );
 };
 
-Media.defaultProps = {
-  setDownloadLink: () => null,
-};
+const ContainerVideo = styled.div`
+  position: relative;
+  width: ${pxToRem(500)};
+  height: ${pxToRem(400)};
+`;
 
-export default Media;
+const Video = styled.video`
+  width: 100%;
+  height: 100%;
+`;
+
+const ContainerGuideline = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+`;
+
+const Decibel = styled.meter`
+  width: ${pxToRem(500)};
+  height: ${pxToRem(50)};
+`;
+
+const pulse = keyframes`
+    40% {
+        transform: scale(1.1);
+        box-shadow: 0 0 0 5px rgba(255, 0, 0, 0.3);
+    }
+
+    80% {
+        transform: scale(1);
+        box-shadow: 0 0 0 10px rgba(255, 0, 0, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 0, 0, 0)
+    }
+`;
+
+const RecordingNotice = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: ${pxToRem(30)};
+  span {
+    color: ${ERROR};
+  }
+`;
+
+const Pulse = styled.div`
+  width: ${pxToRem(30)};
+  height: ${pxToRem(30)};
+  margin-bottom: ${pxToRem(10)};
+  border-radius: 50%;
+  background-color: ${ERROR};
+  animation: ${pulse} 2.5s infinite;
+`;
+
+export default React.memo(Media);
